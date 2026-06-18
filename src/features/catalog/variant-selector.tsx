@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 
 import { cn } from "@/lib/utils";
 import { AddToCart } from "@/features/cart/add-to-cart";
+import { OrderChatButton } from "@/features/order-chat/order-chat-button";
 import type { ProductDetail, Variant } from "@/types/catalog";
 
 function optionsKey(ids: number[]): string {
@@ -128,6 +129,11 @@ export function VariantSelector({ product }: { product: ProductDetail }) {
             <AddToCart
               variantId={selectedVariant.id}
               disabled={!selectedVariant.in_stock}
+            />
+            <OrderChatButton
+              context="product"
+              variantId={selectedVariant.id}
+              className="mt-1"
             />
           </div>
         ) : (

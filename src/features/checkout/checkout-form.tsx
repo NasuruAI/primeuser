@@ -12,6 +12,7 @@ import {
   EMPTY_ADDRESS,
   isAddressComplete,
 } from "@/features/account/address-fields";
+import { OrderChatButton } from "@/features/order-chat/order-chat-button";
 import { OrderSummary } from "@/features/orders/order-summary";
 import { addressApi } from "@/lib/address-client";
 import { cartApi } from "@/lib/cart-client";
@@ -291,6 +292,10 @@ export function CheckoutForm() {
         <p className="text-center text-xs text-ink/45">
           Secure checkout · mock payment in dev
         </p>
+
+        <div className="border-t border-ink/10 pt-4">
+          <OrderChatButton context="checkout" />
+        </div>
       </aside>
     </div>
   );

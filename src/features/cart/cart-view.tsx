@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
 import { cartApi } from "@/lib/cart-client";
+import { OrderChatButton } from "@/features/order-chat/order-chat-button";
 import type { Cart } from "@/types/cart";
 
 import { useCart } from "./cart-context";
@@ -197,6 +198,10 @@ export function CartView() {
         >
           Checkout
         </Link>
+
+        <div className="border-t border-ink/10 pt-3">
+          <OrderChatButton context="cart" />
+        </div>
 
         <button
           type="button"
