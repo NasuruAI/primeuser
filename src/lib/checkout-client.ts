@@ -25,6 +25,10 @@ export const checkoutApi = {
     currency?: string;
     shipping?: Shipping;
     contact?: { email?: string; name?: string };
+    /** Use a saved address book entry instead of inline shipping. */
+    address_id?: string;
+    /** Save the inline shipping to the signed-in user's address book. */
+    save_address?: boolean;
   }) =>
     call<Order>("/checkout/", {
       method: "POST",

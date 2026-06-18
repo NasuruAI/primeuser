@@ -8,6 +8,7 @@ import { useFavourites } from "@/features/favourites/favourites-context";
 const ITEMS = [
   { href: "/account", label: "Overview" },
   { href: "/account/orders", label: "Orders" },
+  { href: "/account/addresses", label: "Addresses" },
   { href: "/account/favourites", label: "Favourites", showCount: true },
   { href: "/account/settings", label: "Notifications" },
 ];

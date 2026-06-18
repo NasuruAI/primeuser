@@ -32,7 +32,8 @@ export function Logo({
           strokeLinecap="round"
         />
       </svg>
-      <span className="font-display text-xl font-bold tracking-tight text-ink">
+      {/* Wordmark hidden on mobile — the mark alone represents the brand there. */}
+      <span className="hidden font-display text-xl font-bold tracking-tight text-ink sm:inline">
         {storeName}
       </span>
     </Link>

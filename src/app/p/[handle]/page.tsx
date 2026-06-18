@@ -38,9 +38,11 @@ export default async function ProductPage({
         / <span className="text-ink/70">{product.title}</span>
       </nav>
 
-      <div className="grid gap-12 lg:grid-cols-2">
-        {/* Gallery */}
-        <ProductGallery images={product.images} title={product.title} />
+      <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
+        {/* Gallery — stays in view while the details scroll on desktop */}
+        <div className="lg:sticky lg:top-24">
+          <ProductGallery images={product.images} title={product.title} />
+        </div>
 
         {/* Details */}
         <div className="lg:py-2">
