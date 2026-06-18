@@ -49,6 +49,9 @@ export type Variant = {
   in_stock: boolean;
   images: ProductImage[];
   price_display: MoneyDisplay | null;
+  /** Original (pre-discount) price, shown struck-through. Null when not discounted. */
+  compare_at_display: MoneyDisplay | null;
+  discount_percent: string;
 };
 
 export type ProductListItem = {
@@ -60,6 +63,8 @@ export type ProductListItem = {
   brand: Brand | null;
   price_from: string | null;
   price_from_display: MoneyDisplay | null;
+  compare_at_from_display: MoneyDisplay | null;
+  discount_percent: string;
   primary_image: ImageUrls | null;
   share_path: string;
   has_options: boolean;

@@ -18,6 +18,8 @@ export function ProductCard({ product }: { product: ProductListItem }) {
 
   const price =
     product.price_from_display?.formatted ?? `$${product.price_from}`;
+  const compareAt = product.compare_at_from_display?.formatted ?? null;
+  const discountPct = Number(product.discount_percent) || 0;
   const fav = isFavourite(product.id);
   const href = `/p/${product.slug}`;
 
@@ -60,8 +62,18 @@ export function ProductCard({ product }: { product: ProductListItem }) {
           </div>
         )}
 
+        {discountPct > 0 && (
+          <span className="absolute left-3 top-3 z-20 bg-accent px-2.5 py-0.5 text-[11px] font-bold text-white">
+            −{discountPct}%
+          </span>
+        )}
+
         {product.brand && (
-          <span className="absolute left-3 top-3 z-20 bg-white/90 px-2.5 py-0.5 text-[11px] font-medium text-ink/70 backdrop-blur">
+          <span
+            className={`absolute left-3 z-20 bg-white/90 px-2.5 py-0.5 text-[11px] font-medium text-ink/70 backdrop-blur ${
+              discountPct > 0 ? "top-11" : "top-3"
+            }`}
+          >
             {product.brand.name}
           </span>
         )}
@@ -162,13 +174,16 @@ export function ProductCard({ product }: { product: ProductListItem }) {
           {product.title}
         </h3>
         {product.price_from && (
-          <div className="mt-auto pt-2">
+          <div className="mt-auto flex items-baseline gap-1.5 pt-2">
             <span className="text-[11px] uppercase tracking-wide text-ink/45">
               from
             </span>
-            <span className="ml-1.5 text-base font-semibold text-ink">
-              {price}
-            </span>
+            <span className="text-base font-semibold text-ink">{price}</span>
+            {compareAt && (
+              <span className="text-sm text-ink/40 line-through">
+                {compareAt}
+              </span>
+            )}
           </div>
         )}
       </div>
