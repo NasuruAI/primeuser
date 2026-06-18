@@ -89,11 +89,21 @@ export function VariantSelector({ product }: { product: ProductDetail }) {
       <div className="rounded-2xl border border-ink/10 bg-white p-5">
         {selectedVariant ? (
           <div className="flex flex-col gap-2">
-            <div className="flex items-baseline gap-3">
+            <div className="flex flex-wrap items-baseline gap-3">
               <span className="font-display text-3xl font-bold text-ink">
                 {selectedVariant.price_display?.formatted ??
                   `$${selectedVariant.price}`}
               </span>
+              {selectedVariant.compare_at_display && (
+                <span className="text-lg text-ink/40 line-through">
+                  {selectedVariant.compare_at_display.formatted}
+                </span>
+              )}
+              {Number(selectedVariant.discount_percent) > 0 && (
+                <span className="bg-accent px-2 py-0.5 text-xs font-bold text-white">
+                  −{Number(selectedVariant.discount_percent)}%
+                </span>
+              )}
               <span
                 className={cn(
                   "rounded-full px-2.5 py-0.5 text-xs font-medium",
