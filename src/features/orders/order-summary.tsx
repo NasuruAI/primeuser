@@ -17,15 +17,15 @@ function money(amount: string, currency: string): string {
 
 export function OrderSummary({ order }: { order: Order }) {
   return (
-    <div className="flex flex-col gap-4 rounded-2xl border border-ink/10 bg-white p-5">
-      <div className="flex items-center justify-between">
+    <div className="flex flex-col gap-4 border border-ink/10 bg-white p-5">
+      <div className="flex items-center justify-between gap-3">
         <div>
           <div className="font-semibold text-ink">Order {order.number}</div>
           <div className="text-xs text-ink/45">
             {new Date(order.created_at).toLocaleString()}
           </div>
         </div>
-        <span className="rounded-full bg-primary-100 px-3 py-1 text-xs font-medium text-primary">
+        <span className="bg-primary-100 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.06em] text-primary">
           {STATUS_LABELS[order.status] ?? order.status}
         </span>
       </div>

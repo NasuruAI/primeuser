@@ -127,7 +127,7 @@ export function CheckoutForm() {
         </div>
         <Link
           href="/catalog"
-          className="mt-6 inline-flex h-11 items-center rounded-full bg-accent px-6 text-sm font-medium text-white transition hover:bg-accent-hover"
+          className="mt-6 inline-flex h-11 items-center bg-ink px-7 text-xs font-semibold uppercase tracking-[0.08em] text-canvas transition hover:bg-primary"
         >
           Continue shopping
         </Link>
@@ -137,11 +137,11 @@ export function CheckoutForm() {
 
   if (!cart || cart.lines.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-ink/15 bg-white p-16 text-center">
-        <p className="text-ink/60">Your cart is empty.</p>
+      <div className="border border-dashed border-ink/15 bg-white p-16 text-center">
+        <p className="text-ink/60">Your bag is empty.</p>
         <Link
           href="/catalog"
-          className="mt-4 inline-flex h-11 items-center rounded-full bg-accent px-6 text-sm font-medium text-white transition hover:bg-accent-hover"
+          className="mt-5 inline-flex h-11 items-center bg-ink px-7 text-xs font-semibold uppercase tracking-[0.08em] text-canvas transition hover:bg-primary"
         >
           Browse the shop
         </Link>
@@ -254,8 +254,9 @@ export function CheckoutForm() {
         </div>
       </div>
 
-      <aside className="flex h-fit flex-col gap-4 rounded-2xl border border-ink/10 bg-white p-6">
-        <h2 className="font-display text-lg font-bold text-ink">Summary</h2>
+      <aside className="flex h-fit flex-col gap-4 border border-ink/10 bg-white p-6 lg:sticky lg:top-24">
+        <span className="eyebrow">Summary</span>
+        <h2 className="-mt-2 font-display text-xl font-bold text-ink">Your order</h2>
         <div className="flex flex-col gap-1.5 text-sm">
           {cart.lines.map((l) => (
             <div key={l.id} className="flex justify-between">

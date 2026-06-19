@@ -13,7 +13,12 @@ export default async function AccountPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <h1 className="font-display text-3xl font-bold text-ink">Overview</h1>
+      <div>
+        <span className="eyebrow">Account</span>
+        <h1 className="mt-2 font-display text-3xl font-bold text-ink">
+          Overview
+        </h1>
+      </div>
 
       {/* Account details */}
       <section className="border border-ink/10 bg-white p-6">

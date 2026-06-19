@@ -94,16 +94,16 @@ export function PaymentProcessing({ orderNumber }: { orderNumber: string }) {
             Thank you! Your order{" "}
             <span className="font-medium text-ink">{orderNumber}</span> is paid.
           </p>
-          <div className="mt-7 flex gap-3">
+          <div className="mt-8 flex gap-3">
             <Link
               href="/account/orders"
-              className="inline-flex h-11 items-center bg-accent px-6 text-sm font-medium text-white transition hover:bg-accent-hover"
+              className="inline-flex h-11 items-center bg-ink px-7 text-xs font-semibold uppercase tracking-[0.08em] text-canvas transition hover:bg-primary"
             >
               View your orders
             </Link>
             <Link
               href="/catalog"
-              className="inline-flex h-11 items-center border border-ink/15 bg-white px-6 text-sm font-medium text-ink transition hover:border-primary"
+              className="inline-flex h-11 items-center border border-ink/15 bg-white px-7 text-xs font-semibold uppercase tracking-[0.08em] text-ink transition hover:border-ink"
             >
               Keep shopping
             </Link>
@@ -122,9 +122,9 @@ export function PaymentProcessing({ orderNumber }: { orderNumber: string }) {
           </p>
           <Link
             href="/cart"
-            className="mt-6 inline-flex h-11 items-center bg-accent px-6 text-sm font-medium text-white transition hover:bg-accent-hover"
+            className="mt-7 inline-flex h-11 items-center bg-ink px-7 text-xs font-semibold uppercase tracking-[0.08em] text-canvas transition hover:bg-primary"
           >
-            Back to cart
+            Back to bag
           </Link>
         </>
       )}

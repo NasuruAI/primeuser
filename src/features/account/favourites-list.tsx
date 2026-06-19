@@ -21,7 +21,7 @@ export function FavouritesList() {
         <p className="text-ink/60">You haven&apos;t saved any favourites yet.</p>
         <Link
           href="/catalog"
-          className="mt-4 inline-flex h-11 items-center bg-accent px-6 text-sm font-medium text-white transition hover:bg-accent-hover"
+          className="mt-5 inline-flex h-11 items-center bg-ink px-7 text-xs font-semibold uppercase tracking-[0.08em] text-canvas transition hover:bg-primary"
         >
           Browse the shop
         </Link>

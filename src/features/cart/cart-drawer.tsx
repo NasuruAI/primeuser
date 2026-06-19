@@ -45,17 +45,15 @@ export function CartDrawer() {
         role="dialog"
         aria-modal="true"
         aria-label="Shopping cart"
-        className={`fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col bg-blush shadow-2xl transition-transform duration-300 ease-out ${
+        className={`fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col bg-canvas shadow-2xl transition-transform duration-300 ease-out-expo ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
         <header className="flex items-center justify-between border-b border-ink/10 px-5 py-4">
-          <h2 className="font-display text-lg font-bold text-ink">
-            Your cart
+          <h2 className="text-sm font-semibold uppercase tracking-[0.1em] text-ink">
+            Shopping bag
             {cart && cart.item_count > 0 && (
-              <span className="ml-2 text-sm font-normal text-ink/50">
-                ({cart.item_count})
-              </span>
+              <span className="ml-2 text-ink/40">({cart.item_count})</span>
             )}
           </h2>
           <button
@@ -77,11 +75,11 @@ export function CartDrawer() {
 
         {lines.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
-            <p className="text-ink/55">Your cart is empty.</p>
+            <p className="text-ink/55">Your bag is empty.</p>
             <Link
               href="/catalog"
               onClick={closeCart}
-              className="inline-flex h-11 items-center bg-accent px-6 text-sm font-medium text-white transition hover:bg-accent-hover"
+              className="inline-flex h-11 items-center bg-ink px-7 text-xs font-semibold uppercase tracking-[0.08em] text-canvas transition hover:bg-primary"
             >
               Browse the shop
             </Link>
@@ -125,16 +123,16 @@ export function CartDrawer() {
                 <Link
                   href="/checkout"
                   onClick={closeCart}
-                  className="flex h-12 items-center justify-center bg-accent text-sm font-medium text-white transition hover:bg-accent-hover"
+                  className="flex h-12 items-center justify-center bg-ink text-xs font-semibold uppercase tracking-[0.08em] text-canvas transition hover:bg-primary"
                 >
                   Checkout
                 </Link>
                 <Link
                   href="/cart"
                   onClick={closeCart}
-                  className="flex h-11 items-center justify-center border border-ink/15 bg-white text-sm font-medium text-ink transition hover:border-primary hover:text-primary"
+                  className="flex h-11 items-center justify-center border border-ink/15 bg-white text-xs font-semibold uppercase tracking-[0.08em] text-ink transition hover:border-ink"
                 >
-                  View full cart
+                  View bag
                 </Link>
               </div>
             </footer>

@@ -5,9 +5,12 @@ export const metadata = { title: "Notifications" };
 export default function AccountSettingsPage() {
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="font-display text-3xl font-bold text-ink">
-        Notifications
-      </h1>
+      <div>
+        <span className="eyebrow">Preferences</span>
+        <h1 className="mt-2 font-display text-3xl font-bold text-ink">
+          Notifications
+        </h1>
+      </div>
       <ProfileSettings />
     </div>
   );

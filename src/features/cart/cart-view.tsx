@@ -55,10 +55,10 @@ export function CartView() {
   if (!cart || cart.lines.length === 0) {
     return (
       <div className="border border-dashed border-ink/15 bg-white p-16 text-center">
-        <p className="text-ink/60">Your cart is empty.</p>
+        <p className="text-ink/60">Your bag is empty.</p>
         <Link
           href="/catalog"
-          className="mt-4 inline-flex h-11 items-center bg-accent px-6 text-sm font-medium text-white transition hover:bg-accent-hover"
+          className="mt-5 inline-flex h-11 items-center bg-ink px-7 text-xs font-semibold uppercase tracking-[0.08em] text-canvas transition hover:bg-primary"
         >
           Browse the shop
         </Link>
@@ -148,8 +148,9 @@ export function CartView() {
         ))}
       </div>
 
-      <aside className="flex h-fit flex-col gap-4 border border-ink/10 bg-white p-6">
-        <h2 className="font-display text-lg font-bold text-ink">
+      <aside className="flex h-fit flex-col gap-4 border border-ink/10 bg-white p-6 lg:sticky lg:top-24">
+        <span className="eyebrow">Summary</span>
+        <h2 className="-mt-2 font-display text-xl font-bold text-ink">
           Order summary
         </h2>
         <div className="flex justify-between text-sm">
@@ -194,7 +195,7 @@ export function CartView() {
 
         <Link
           href="/checkout"
-          className="flex h-12 items-center justify-center bg-accent text-sm font-medium text-white shadow-sm transition hover:bg-accent-hover"
+          className="flex h-12 items-center justify-center bg-ink text-xs font-semibold uppercase tracking-[0.08em] text-canvas transition hover:bg-primary"
         >
           Checkout
         </Link>
@@ -206,9 +207,9 @@ export function CartView() {
         <button
           type="button"
           onClick={onShare}
-          className="text-sm font-medium text-primary hover:text-accent"
+          className="text-xs font-medium uppercase tracking-[0.06em] text-primary transition hover:text-accent"
         >
-          Share cart / Pay for a Friend
+          Share bag · Pay for a Friend
         </button>
         {shareUrl && (
           <div className="bg-blush p-3 text-xs text-ink/70">

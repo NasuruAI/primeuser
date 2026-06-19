@@ -10,16 +10,16 @@ export default function NotFound() {
       <p className="mt-2 max-w-md text-ink/55">
         The page you&apos;re looking for may have moved or no longer exists.
       </p>
-      <div className="mt-7 flex gap-3">
+      <div className="mt-8 flex gap-3">
         <Link
           href="/"
-          className="inline-flex h-11 items-center bg-accent px-6 text-sm font-medium text-white transition hover:bg-accent-hover"
+          className="inline-flex h-11 items-center bg-ink px-7 text-xs font-semibold uppercase tracking-[0.08em] text-canvas transition hover:bg-primary"
         >
           Back home
         </Link>
         <Link
           href="/catalog"
-          className="inline-flex h-11 items-center border border-ink/15 bg-white px-6 text-sm font-medium text-ink transition hover:border-primary"
+          className="inline-flex h-11 items-center border border-ink/15 bg-white px-7 text-xs font-semibold uppercase tracking-[0.08em] text-ink transition hover:border-ink"
         >
           Browse the shop
         </Link>
