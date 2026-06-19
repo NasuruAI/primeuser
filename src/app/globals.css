@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --background: #fff0f3;
-  --foreground: #1a1a2e;
+  --background: #faf8f6;
+  --foreground: #16161f;
 }
 
 @layer base {
@@ -12,14 +12,15 @@
     scroll-behavior: smooth;
   }
   body {
-    @apply bg-blush text-ink antialiased;
+    @apply bg-canvas text-ink antialiased;
+    font-feature-settings: "ss01", "cv01";
   }
   ::selection {
     @apply bg-accent/20;
   }
   /* Accessible, on-brand focus ring for keyboard users. */
   :focus-visible {
-    @apply outline-none ring-2 ring-accent/50 ring-offset-2 ring-offset-blush;
+    @apply outline-none ring-2 ring-accent/50 ring-offset-2 ring-offset-canvas;
   }
 }
 
@@ -27,6 +28,54 @@
   /* Shared container */
   .container-site {
     @apply mx-auto w-full max-w-site px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Small uppercase label used above headings ("eyebrow"). */
+  .eyebrow {
+    @apply text-[11px] font-semibold uppercase tracking-eyebrow text-accent;
+  }
+
+  /* Animated link underline that grows from the left on hover. */
+  .link-underline {
+    @apply relative;
+  }
+  .link-underline::after {
+    content: "";
+    @apply absolute -bottom-0.5 left-0 h-px w-full origin-right scale-x-0 bg-current transition-transform duration-300 ease-out-expo;
+  }
+  .link-underline:hover::after {
+    @apply origin-left scale-x-100;
+  }
+}
+
+@layer utilities {
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  /* Reveal-on-scroll (paired with a tiny IntersectionObserver helper). */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
+    .animate-marquee {
+      animation: none;
+    }
   }
 }
 

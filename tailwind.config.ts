@@ -32,19 +32,41 @@ const config: Config = {
           hover: "#A8123D",
           50: "#FFE9EF",
         },
-        ink: "#1A1A2E", // text
-        blush: "#FFF0F3", // background
+        ink: "#16161F", // text (slightly deeper for crisper contrast)
+        blush: "#FFF0F3", // soft brand accent surface
+        canvas: "#FAF8F6", // warm off-white page background
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         display: ["var(--font-display)", "Georgia", "serif"],
       },
+      letterSpacing: {
+        eyebrow: "0.22em",
+      },
       boxShadow: {
-        card: "0 1px 2px rgba(26,26,46,0.04), 0 8px 24px rgba(26,26,46,0.06)",
-        "card-hover": "0 2px 6px rgba(26,26,46,0.08), 0 16px 40px rgba(26,26,46,0.12)",
+        card: "0 1px 2px rgba(22,22,31,0.03), 0 10px 30px rgba(22,22,31,0.05)",
+        "card-hover": "0 2px 8px rgba(22,22,31,0.06), 0 24px 50px rgba(22,22,31,0.14)",
+        soft: "0 8px 30px rgba(22,22,31,0.06)",
       },
       maxWidth: {
-        site: "80rem",
+        site: "82rem",
+      },
+      transitionTimingFunction: {
+        "out-expo": "cubic-bezier(0.16, 1, 0.3, 1)",
+      },
+      keyframes: {
+        "fade-up": {
+          from: { opacity: "0", transform: "translateY(14px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        marquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
+        },
+      },
+      animation: {
+        "fade-up": "fade-up 0.6s cubic-bezier(0.16,1,0.3,1) both",
+        marquee: "marquee 28s linear infinite",
       },
     },
   },

@@ -26,19 +26,20 @@ export default async function ProductPage({
   if (!product) notFound();
 
   return (
-    <div className="container-site py-10">
-      <nav className="mb-6 text-sm text-ink/50">
-        <Link href="/" className="hover:text-primary">
+    <div className="container-site py-8 sm:py-12">
+      <nav className="mb-7 text-xs uppercase tracking-[0.12em] text-ink/40">
+        <Link href="/" className="transition hover:text-primary">
           Home
-        </Link>{" "}
-        /{" "}
-        <Link href="/catalog" className="hover:text-primary">
+        </Link>
+        <span className="px-2">/</span>
+        <Link href="/catalog" className="transition hover:text-primary">
           Shop
-        </Link>{" "}
-        / <span className="text-ink/70">{product.title}</span>
+        </Link>
+        <span className="px-2">/</span>
+        <span className="text-ink/70">{product.title}</span>
       </nav>
 
-      <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
+      <div className="grid gap-8 lg:grid-cols-2 lg:items-start lg:gap-14">
         {/* Gallery — stays in view while the details scroll on desktop */}
         <div className="lg:sticky lg:top-24">
           <ProductGallery images={product.images} title={product.title} />
@@ -49,11 +50,11 @@ export default async function ProductPage({
           <div className="flex items-start justify-between gap-4">
             <div>
               {product.brand && (
-                <p className="text-sm font-medium uppercase tracking-wide text-primary">
+                <p className="text-[11px] font-semibold uppercase tracking-eyebrow text-accent">
                   {product.brand.name}
                 </p>
               )}
-              <h1 className="mt-1 font-display text-4xl font-bold text-ink">
+              <h1 className="mt-2 font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">
                 {product.title}
               </h1>
             </div>
@@ -61,23 +62,26 @@ export default async function ProductPage({
           </div>
 
           {product.description && (
-            <p className="mt-5 leading-relaxed text-ink/70">
+            <p className="mt-5 max-w-prose leading-relaxed text-ink/65">
               {product.description}
             </p>
           )}
 
-          <div className="mt-7 border-t border-ink/10 pt-7">
+          <div className="mt-8 border-t border-ink/10 pt-8">
             <VariantSelector product={product} />
           </div>
 
-          <ul className="mt-8 space-y-2 text-sm text-ink/60">
-            <li className="flex items-center gap-2">
-              ✓ Free shipping over $50
-            </li>
-            <li className="flex items-center gap-2">✓ 30-day returns</li>
-            <li className="flex items-center gap-2">
-              ✓ Priced in your currency
-            </li>
+          <ul className="mt-8 grid grid-cols-1 gap-3 border-t border-ink/10 pt-8 text-sm text-ink/65 sm:grid-cols-3">
+            {[
+              { t: "Free shipping", d: "On qualifying orders" },
+              { t: "Easy returns", d: "Within 30 days" },
+              { t: "Your currency", d: "Live FX at checkout" },
+            ].map((f) => (
+              <li key={f.t}>
+                <span className="block font-medium text-ink">{f.t}</span>
+                <span className="text-xs text-ink/45">{f.d}</span>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

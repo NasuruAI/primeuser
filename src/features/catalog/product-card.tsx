@@ -30,7 +30,7 @@ export function ProductCard({ product }: { product: ProductListItem }) {
     setAdding(true);
     try {
       await run(() => cartApi.addItem(product.default_variant!, 1));
-      toast.success("Added to cart");
+      toast.success("Added to bag");
       openCart();
     } catch {
       // Error already surfaced as a toast by the cart context.
@@ -46,15 +46,15 @@ export function ProductCard({ product }: { product: ProductListItem }) {
   }
 
   return (
-    <div className="group relative flex flex-col border border-ink/10 bg-white shadow-card transition duration-200 hover:-translate-y-0.5 hover:shadow-card-hover">
-      <div className="relative aspect-square overflow-hidden bg-blush">
+    <div className="group relative flex flex-col">
+      <div className="relative aspect-[3/4] overflow-hidden bg-blush">
         {product.primary_image ? (
           <Image
             src={product.primary_image.card}
             alt={product.title}
             fill
             sizes="(max-width: 768px) 50vw, 25vw"
-            className="object-cover transition duration-300 group-hover:scale-105"
+            className="object-cover transition-transform duration-700 ease-out-expo group-hover:scale-[1.04]"
           />
         ) : (
           <div className="flex h-full items-center justify-center text-sm text-ink/30">
@@ -63,28 +63,20 @@ export function ProductCard({ product }: { product: ProductListItem }) {
         )}
 
         {discountPct > 0 && (
-          <span className="absolute left-3 top-3 z-20 bg-accent px-2.5 py-0.5 text-[11px] font-bold text-white">
+          <span className="absolute left-3 top-3 z-20 bg-accent px-2.5 py-1 text-[11px] font-bold tracking-wide text-white">
             −{discountPct}%
           </span>
         )}
 
-        {product.brand && (
-          <span
-            className={`absolute left-3 z-20 bg-white/90 px-2.5 py-0.5 text-[11px] font-medium text-ink/70 backdrop-blur ${
-              discountPct > 0 ? "top-11" : "top-3"
-            }`}
-          >
-            {product.brand.name}
-          </span>
-        )}
-
-        {/* Add to favourites — top right */}
+        {/* Wishlist — reveals on hover (always visible on touch) */}
         <button
           type="button"
           onClick={onToggleFav}
           aria-label={fav ? "Remove from favourites" : "Add to favourites"}
           aria-pressed={fav}
-          className="absolute right-3 top-3 z-20 inline-flex h-9 w-9 items-center justify-center border border-ink/10 bg-white/90 backdrop-blur transition hover:border-accent"
+          className={`absolute right-3 top-3 z-20 inline-flex h-9 w-9 items-center justify-center bg-white/85 backdrop-blur transition duration-300 hover:bg-white lg:opacity-0 lg:group-hover:opacity-100 ${
+            fav ? "opacity-100" : ""
+          }`}
         >
           <svg
             width="18"
@@ -103,84 +95,40 @@ export function ProductCard({ product }: { product: ProductListItem }) {
           </svg>
         </button>
 
-        {/* Add to cart (or choose options) — bottom right */}
+        {/* Quick action — slides up on hover (always shown on touch) */}
         {product.has_options ? (
           <Link
             href={href}
-            aria-label={`Choose options for ${product.title}`}
-            className="absolute bottom-3 right-3 z-20 inline-flex h-10 items-center bg-ink px-3 text-xs font-medium text-white shadow-lg transition duration-200 hover:bg-accent"
+            className="absolute inset-x-0 bottom-0 z-20 flex h-11 items-center justify-center bg-ink text-xs font-semibold uppercase tracking-[0.1em] text-white transition-transform duration-300 ease-out-expo hover:bg-accent lg:translate-y-full lg:group-hover:translate-y-0"
           >
-            Options
+            Choose options
           </Link>
         ) : (
           <button
             type="button"
             onClick={onAdd}
             disabled={adding || !product.default_variant}
-            aria-label={`Add ${product.title} to cart`}
-            className="absolute bottom-3 right-3 z-20 inline-flex h-10 w-10 items-center justify-center bg-ink text-white shadow-lg transition duration-200 hover:bg-accent disabled:cursor-not-allowed disabled:opacity-50"
+            className="absolute inset-x-0 bottom-0 z-20 flex h-11 items-center justify-center bg-ink text-xs font-semibold uppercase tracking-[0.1em] text-white transition-transform duration-300 ease-out-expo hover:bg-accent disabled:opacity-60 lg:translate-y-full lg:group-hover:translate-y-0"
           >
-            {adding ? (
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden
-                className="animate-spin"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="9"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeOpacity="0.3"
-                />
-                <path
-                  d="M21 12a9 9 0 0 0-9-9"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
-            ) : (
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                aria-hidden
-              >
-                <path
-                  d="M6 7h12l-1 11a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L6 7Z"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                  strokeLinejoin="round"
-                />
-                <path
-                  d="M9 7a3 3 0 0 1 6 0"
-                  stroke="currentColor"
-                  strokeWidth="1.6"
-                />
-              </svg>
-            )}
+            {adding ? "Adding…" : "Add to bag"}
           </button>
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-1 p-4">
-        <h3 className="text-sm font-medium text-ink transition group-hover:text-primary">
+      <div className="flex flex-1 flex-col gap-1 pt-3">
+        {product.brand && (
+          <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-ink/40">
+            {product.brand.name}
+          </span>
+        )}
+        <h3 className="text-sm text-ink transition-colors group-hover:text-primary">
           {product.title}
         </h3>
         {product.price_from && (
-          <div className="mt-auto flex items-baseline gap-1.5 pt-2">
-            <span className="text-[11px] uppercase tracking-wide text-ink/45">
-              from
-            </span>
-            <span className="text-base font-semibold text-ink">{price}</span>
+          <div className="mt-0.5 flex items-baseline gap-2">
+            <span className="text-sm font-semibold text-ink">{price}</span>
             {compareAt && (
-              <span className="text-sm text-ink/40 line-through">
+              <span className="text-xs text-ink/40 line-through">
                 {compareAt}
               </span>
             )}

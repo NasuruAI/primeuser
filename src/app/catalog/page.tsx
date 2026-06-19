@@ -1,7 +1,7 @@
 import Link from "next/link";
 
-import { SortSelect } from "@/features/catalog/sort-select";
 import { ProductCard } from "@/features/catalog/product-card";
+import { SortSelect } from "@/features/catalog/sort-select";
 import { getCategories, getProducts } from "@/lib/catalog";
 import { selectedCurrency } from "@/lib/currency";
 
@@ -43,41 +43,42 @@ export default async function CatalogPage({
     return qs ? `/catalog?${qs}` : "/catalog";
   };
 
+  const heading = searchParams.search
+    ? `“${searchParams.search}”`
+    : (activeCategory?.name ?? "The collection");
+
   return (
-    <div className="container-site py-10">
+    <div className="container-site py-10 sm:py-14">
       <header className="mb-8">
-        <nav className="mb-2 text-sm text-ink/50">
-          <Link href="/" className="hover:text-primary">
+        <nav className="mb-3 text-xs uppercase tracking-[0.12em] text-ink/40">
+          <Link href="/" className="transition hover:text-primary">
             Home
-          </Link>{" "}
-          /{" "}
+          </Link>
+          <span className="px-2">/</span>
           <span className="text-ink/70">{activeCategory?.name ?? "Shop"}</span>
         </nav>
-        {(searchParams.search || activeCategory) && (
-          <h1 className="font-display text-4xl font-bold text-ink">
-            {searchParams.search
-              ? `Results for “${searchParams.search}”`
-              : activeCategory?.name}
-          </h1>
-        )}
+        <h1 className="font-display text-4xl font-bold text-ink sm:text-5xl">
+          {heading}
+        </h1>
         {searchParams.search && (
-          <p className="mt-1 text-sm text-ink/55">
-            <Link href="/catalog" className="text-primary hover:text-accent">
-              clear search
-            </Link>
-          </p>
+          <Link
+            href="/catalog"
+            className="mt-2 inline-block text-sm text-primary hover:text-accent"
+          >
+            Clear search
+          </Link>
         )}
       </header>
 
       {/* Toolbar: categories + sort */}
-      <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-        <nav className="flex flex-wrap gap-2 text-sm">
+      <div className="mb-10 flex flex-wrap items-center justify-between gap-4 border-b border-ink/10 pb-5">
+        <nav className="flex flex-wrap gap-1.5 text-sm">
           <Link
             href={catHref()}
-            className={`border px-4 py-1.5 transition ${
+            className={`px-4 py-1.5 text-[13px] font-medium uppercase tracking-[0.06em] transition ${
               !searchParams.category
-                ? "border-primary bg-primary text-blush"
-                : "border-ink/15 bg-white text-ink hover:border-primary"
+                ? "bg-ink text-canvas"
+                : "text-ink/60 hover:text-ink"
             }`}
           >
             All
@@ -86,10 +87,10 @@ export default async function CatalogPage({
             <Link
               key={c.id}
               href={catHref(c.slug)}
-              className={`border px-4 py-1.5 transition ${
+              className={`px-4 py-1.5 text-[13px] font-medium uppercase tracking-[0.06em] transition ${
                 searchParams.category === c.slug
-                  ? "border-primary bg-primary text-blush"
-                  : "border-ink/15 bg-white text-ink hover:border-primary"
+                  ? "bg-ink text-canvas"
+                  : "text-ink/60 hover:text-ink"
               }`}
             >
               {c.name}
@@ -110,7 +111,7 @@ export default async function CatalogPage({
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-2 gap-x-5 gap-y-10 md:grid-cols-3 lg:grid-cols-4">
           {products.results.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
