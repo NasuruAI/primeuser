@@ -32,10 +32,11 @@ function PhoneIcon() {
   );
 }
 
+// Brand-accurate channel colours (Telegram blue, WhatsApp green, on-brand call).
 const STYLES: Record<Channel, string> = {
-  telegram: "bg-[#229ED9] text-white hover:bg-[#1b8cc0]",
-  whatsapp: "bg-[#25D366] text-white hover:bg-[#1ebe5a]",
-  call: "border border-ink/20 bg-white text-ink hover:border-ink/40",
+  telegram: "bg-[#229ED9] hover:bg-[#1B86B8]",
+  whatsapp: "bg-[#25D366] hover:bg-[#1EBE5A]",
+  call: "bg-primary hover:bg-primary-800",
 };
 const ICONS: Record<Channel, React.ReactNode> = {
   telegram: <TelegramIcon />,
@@ -97,19 +98,34 @@ export function OrderChatButton({
   }
 
   return (
-    <div className={`flex flex-col gap-2 ${className}`}>
-      {cfg.note && <p className="text-sm text-ink/60">{cfg.note}</p>}
-      <div className="flex flex-wrap gap-2">
+    <div className={`flex flex-col gap-3 ${className}`}>
+      {cfg.note && (
+        <p className="text-xs font-medium uppercase tracking-[0.08em] text-ink/55">
+          {cfg.note}
+        </p>
+      )}
+      <div className="flex flex-wrap items-start gap-5">
         {channels.map((ch) => (
           <button
             key={ch}
             type="button"
             onClick={() => go(ch)}
             disabled={busy !== null}
-            className={`inline-flex h-11 items-center gap-2 px-4 text-sm font-medium transition disabled:opacity-60 ${STYLES[ch]}`}
+            aria-label={ch === "call" ? "Call to order" : `Order on ${LABELS[ch]}`}
+            title={ch === "call" ? "Call to order" : `Order on ${LABELS[ch]}`}
+            className="group flex flex-col items-center gap-1.5 disabled:opacity-60"
           >
-            {ICONS[ch]}
-            {busy === ch ? "Opening…" : ch === "call" ? "Call to order" : `Order on ${LABELS[ch]}`}
+            <span
+              style={{ borderRadius: "9999px" }}
+              className={`flex h-12 w-12 items-center justify-center text-white shadow-soft ring-1 ring-black/5 transition-transform duration-200 ease-out-expo group-hover:-translate-y-0.5 group-hover:scale-105 ${STYLES[ch]} ${
+                busy === ch ? "animate-pulse" : ""
+              }`}
+            >
+              {ICONS[ch]}
+            </span>
+            <span className="text-[11px] font-medium text-ink/60">
+              {LABELS[ch]}
+            </span>
           </button>
         ))}
       </div>
