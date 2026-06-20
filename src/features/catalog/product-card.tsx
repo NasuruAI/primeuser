@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+import { Stars } from "@/components/ui/stars";
 import { useToast } from "@/components/ui/toast";
 import { useCart } from "@/features/cart/cart-context";
 import { useFavourites } from "@/features/favourites/favourites-context";
@@ -132,6 +133,14 @@ export function ProductCard({ product }: { product: ProductListItem }) {
                 {compareAt}
               </span>
             )}
+          </div>
+        )}
+        {product.rating_count > 0 && (
+          <div className="mt-1 flex items-center gap-1.5">
+            <Stars rating={Number(product.rating_avg)} size={12} />
+            <span className="text-[11px] text-ink/45">
+              ({product.rating_count})
+            </span>
           </div>
         )}
       </div>
