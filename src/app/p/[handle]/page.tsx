@@ -1,19 +1,67 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
+import { JsonLd } from "@/components/seo/json-ld";
 import { ProductGallery } from "@/features/catalog/product-gallery";
 import { ShareButton } from "@/features/catalog/share-button";
 import { VariantSelector } from "@/features/catalog/variant-selector";
 import { getProductByHandle } from "@/lib/catalog";
 import { selectedCurrency } from "@/lib/currency";
+import {
+  SITE_LOCATION,
+  absoluteUrl,
+  breadcrumbLd,
+  productLd,
+} from "@/lib/seo";
+import type { ProductDetail } from "@/types/catalog";
+
+function priceFrom(product: ProductDetail): string | null {
+  const prices = product.variants
+    .map((v) => Number(v.price))
+    .filter((n) => Number.isFinite(n) && n > 0);
+  return prices.length ? String(Math.min(...prices)) : null;
+}
+
+function seoDescription(product: ProductDetail): string {
+  const base = product.description?.trim();
+  const brand = product.brand ? `${product.brand.name} ` : "";
+  return (
+    (base && base.length > 40
+      ? base
+      : `Shop ${brand}${product.title} at the best clothing store in ${SITE_LOCATION}.`) +
+    ` Fast delivery across Lagos & nationwide.`
+  ).slice(0, 300);
+}
 
 export async function generateMetadata({
   params,
 }: {
   params: { handle: string };
-}) {
+}): Promise<Metadata> {
   const product = await getProductByHandle(params.handle);
-  return { title: product ? product.title : "Product" };
+  if (!product) return { title: "Product not found" };
+  const description = seoDescription(product);
+  const image = product.images[0]?.urls.detail;
+  const url = `/p/${product.slug}`;
+  return {
+    title: `${product.title}${product.brand ? ` — ${product.brand.name}` : ""}`,
+    description,
+    alternates: { canonical: url },
+    openGraph: {
+      type: "website",
+      title: product.title,
+      description,
+      url,
+      images: image ? [{ url: image }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.title,
+      description,
+      images: image ? [image] : undefined,
+    },
+  };
 }
 
 // Public product / share page: resolvable by slug OR short_id, no auth required.
@@ -25,8 +73,31 @@ export default async function ProductPage({
   const product = await getProductByHandle(params.handle, selectedCurrency());
   if (!product) notFound();
 
+  const url = absoluteUrl(`/p/${product.slug}`);
+  const inStock = product.variants.some((v) => v.in_stock);
+
   return (
     <div className="container-site py-8 sm:py-12">
+      <JsonLd
+        data={productLd({
+          name: product.title,
+          description: seoDescription(product),
+          url,
+          image: product.images[0]?.urls.detail,
+          brand: product.brand?.name,
+          sku: product.variants.find((v) => v.is_default)?.sku,
+          price: priceFrom(product),
+          currency: "NGN",
+          inStock,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", url: "/" },
+          { name: "Shop", url: "/catalog" },
+          { name: product.title, url: `/p/${product.slug}` },
+        ])}
+      />
       <nav className="mb-7 text-xs uppercase tracking-[0.12em] text-ink/40">
         <Link href="/" className="transition hover:text-primary">
           Home

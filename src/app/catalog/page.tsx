@@ -5,7 +5,12 @@ import { SortSelect } from "@/features/catalog/sort-select";
 import { getCategories, getProducts } from "@/lib/catalog";
 import { selectedCurrency } from "@/lib/currency";
 
-export const metadata = { title: "Shop" };
+export const metadata = {
+  title: "Shop Clothing in Lagos, Nigeria",
+  description:
+    "Browse the latest clothing and fashion — quality pieces with fast delivery across Lagos, Nigeria and nationwide.",
+  alternates: { canonical: "/catalog" },
+};
 
 const SORT_MAP: Record<string, string> = {
   newest: "-created_at",

@@ -2,10 +2,19 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 
 import "./globals.css";
+import { JsonLd } from "@/components/seo/json-ld";
 import { SiteChrome } from "@/components/store/site-chrome";
 import { ToastProvider } from "@/components/ui/toast";
 import { FavouritesProvider } from "@/features/favourites/favourites-context";
 import { getStoreConfig } from "@/lib/config";
+import {
+  DEFAULT_KEYWORDS,
+  SITE_LOCATION,
+  SITE_URL,
+  defaultDescription,
+  organizationLd,
+  webSiteLd,
+} from "@/lib/seo";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,19 +28,51 @@ const playfair = Playfair_Display({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { name, tagline } = await getStoreConfig();
+  const { name, tagline, logoUrl } = await getStoreConfig();
+  const description = defaultDescription(name, tagline);
+  const title = `${name} — Clothing Store & Supplier in ${SITE_LOCATION}`;
   return {
-    title: { default: name, template: `%s · ${name}` },
-    description: tagline,
+    metadataBase: new URL(SITE_URL),
+    title: { default: title, template: `%s · ${name}` },
+    description,
+    keywords: DEFAULT_KEYWORDS,
+    applicationName: name,
+    alternates: { canonical: "/" },
+    openGraph: {
+      type: "website",
+      siteName: name,
+      title,
+      description,
+      url: SITE_URL,
+      locale: "en_NG",
+    },
+    twitter: { card: "summary_large_image", title, description },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    },
+    icons: logoUrl ? { icon: logoUrl } : undefined,
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const { name, tagline, logoUrl, supportEmail, phone } = await getStoreConfig();
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body className="min-h-screen font-sans">
+        <JsonLd
+          data={organizationLd({
+            name,
+            tagline,
+            logoUrl,
+            email: supportEmail,
+            phone,
+          })}
+        />
+        <JsonLd data={webSiteLd(name)} />
         <ToastProvider>
           <FavouritesProvider>
             <SiteChrome>{children}</SiteChrome>

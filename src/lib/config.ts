@@ -25,6 +25,8 @@ export type StoreConfig = {
   announcement: string;
   /** Delivery URL of the admin-uploaded store logo, or "" to use the wordmark. */
   logoUrl: string;
+  /** Public contact phone (order_chat.phone_number), used for SEO/schema. */
+  phone: string;
   hero: HeroConfig;
 };
 
@@ -34,6 +36,7 @@ const FALLBACK: StoreConfig = {
   supportEmail: "support@idealcommerce.test",
   announcement: "",
   logoUrl: "",
+  phone: "",
   hero: {
     badge: "New season · 2026 collection",
     headline: "Shop the world, pay your way.",
@@ -83,6 +86,7 @@ export const getStoreConfig = cache(async (): Promise<StoreConfig> => {
           ? (s["content.announcement"] as string)
           : "",
       logoUrl,
+      phone: str("order_chat.phone_number", ""),
       hero: {
         badge: str("hero.badge", h.badge),
         headline: str("hero.headline", h.headline),
