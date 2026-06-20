@@ -5,6 +5,7 @@ import { ProductCard } from "@/features/catalog/product-card";
 import { FlashSaleSection } from "@/features/home/flash-sale";
 import { Hero } from "@/features/home/hero";
 import { Newsletter } from "@/features/home/newsletter";
+import { SeoContent } from "@/features/home/seo-content";
 import { getCategories, getProducts } from "@/lib/catalog";
 import { getStoreConfig } from "@/lib/config";
 import { selectedCurrency } from "@/lib/currency";
@@ -153,6 +154,9 @@ export default async function Home() {
           <Newsletter storeName={storeName} />
         </Reveal>
       </section>
+
+      {/* SEO content (just above the footer) */}
+      <SeoContent storeName={storeName} />
     </div>
   );
 }
