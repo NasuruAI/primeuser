@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -18,7 +17,6 @@ const schema = z.object({
 type Values = z.infer<typeof schema>;
 
 export function RegisterForm() {
-  const router = useRouter();
   const toast = useToast();
 
   const {
@@ -38,9 +36,8 @@ export function RegisterForm() {
       toast.error(body.error ?? "Could not create your account.");
       return;
     }
-    toast.success("Account created — welcome!");
-    router.replace("/account");
-    router.refresh();
+    // Hard navigation so /account renders with the freshly set auth cookie.
+    window.location.assign("/account");
   }
 
   return (

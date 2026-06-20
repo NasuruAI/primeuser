@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -16,10 +16,14 @@ const schema = z.object({
 
 type Values = z.infer<typeof schema>;
 
+/** Only allow same-site relative redirects (no open-redirect / off-site). */
+function safeNext(raw: string | null): string {
+  return raw && raw.startsWith("/") && !raw.startsWith("//") ? raw : "/account";
+}
+
 export function LoginForm() {
-  const router = useRouter();
   const params = useSearchParams();
-  const next = params.get("next") || "/account";
+  const next = safeNext(params.get("next"));
   const toast = useToast();
 
   const {
@@ -39,9 +43,9 @@ export function LoginForm() {
       toast.error(body.error ?? "Invalid email or password.");
       return;
     }
-    toast.success("Signed in");
-    router.replace(next);
-    router.refresh();
+    // Hard navigation so the destination is server-rendered with the freshly
+    // set auth cookie (a soft router.replace + refresh can race and stay here).
+    window.location.assign(next);
   }
 
   return (
