@@ -13,6 +13,7 @@ import { SearchBar } from "./search-bar";
 const NAV = [
   { href: "/catalog", label: "Shop" },
   { href: "/catalog?sort=newest", label: "New in" },
+  { href: "/flash-sale", label: "Flash Sale" },
   { href: "/blog", label: "Journal" },
 ];
 

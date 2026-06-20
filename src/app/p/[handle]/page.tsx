@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { JsonLd } from "@/components/seo/json-ld";
 import { Stars } from "@/components/ui/stars";
+import { FlashBadge, StockBar } from "@/components/ui/stock-bar";
 import { ProductGallery } from "@/features/catalog/product-gallery";
 import { ProductTabs } from "@/features/catalog/product-tabs";
 import { ShareButton } from "@/features/catalog/share-button";
@@ -125,11 +126,14 @@ export default async function ProductPage({
         <div className="lg:py-2">
           <div className="flex items-start justify-between gap-4">
             <div>
-              {product.brand && (
-                <p className="text-[11px] font-semibold uppercase tracking-eyebrow text-accent">
-                  {product.brand.name}
-                </p>
-              )}
+              <div className="flex items-center gap-2">
+                {product.is_flash_sale && <FlashBadge />}
+                {product.brand && (
+                  <p className="text-[11px] font-semibold uppercase tracking-eyebrow text-accent">
+                    {product.brand.name}
+                  </p>
+                )}
+              </div>
               <h1 className="mt-2 font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">
                 {product.title}
               </h1>
@@ -146,6 +150,14 @@ export default async function ProductPage({
             </div>
             <ShareButton sharePath={product.share_path} />
           </div>
+
+          {product.stock_full > 0 && (
+            <StockBar
+              available={product.stock_available}
+              full={product.stock_full}
+              className="mt-6 max-w-xs"
+            />
+          )}
 
           <div className="mt-7 border-t border-ink/10 pt-7">
             <VariantSelector product={product} />

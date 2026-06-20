@@ -19,6 +19,7 @@ export async function getProducts(
     search?: string;
     currency?: string;
     ordering?: string;
+    flash?: boolean;
   } = {},
 ): Promise<Paginated<ProductListItem>> {
   const qs = new URLSearchParams();
@@ -26,6 +27,7 @@ export async function getProducts(
   if (params.search) qs.set("search", params.search);
   if (params.currency) qs.set("currency", params.currency);
   if (params.ordering) qs.set("ordering", params.ordering);
+  if (params.flash) qs.set("is_flash_sale", "true");
   const suffix = qs.toString() ? `?${qs}` : "";
   return backendFetch<Paginated<ProductListItem>>(
     `/catalog/products/${suffix}`,

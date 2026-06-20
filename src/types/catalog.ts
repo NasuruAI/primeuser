@@ -75,6 +75,9 @@ export type ProductListItem = {
   discount_percent: string;
   rating_avg: string;
   rating_count: number;
+  is_flash_sale: boolean;
+  stock_available: number;
+  stock_full: number;
   primary_image: ImageUrls | null;
   share_path: string;
   has_options: boolean;
@@ -94,6 +97,9 @@ export type ProductDetail = {
   discount_percent: string;
   rating_avg: string;
   rating_count: number;
+  is_flash_sale: boolean;
+  stock_available: number;
+  stock_full: number;
   option_types: OptionType[];
   variants: Variant[];
   images: ProductImage[];

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { Stars } from "@/components/ui/stars";
+import { FlashBadge, StockBar } from "@/components/ui/stock-bar";
 import { useToast } from "@/components/ui/toast";
 import { useCart } from "@/features/cart/cart-context";
 import { useFavourites } from "@/features/favourites/favourites-context";
@@ -23,6 +24,8 @@ export function ProductCard({ product }: { product: ProductListItem }) {
   const discountPct = Number(product.discount_percent) || 0;
   const fav = isFavourite(product.id);
   const href = `/p/${product.slug}`;
+  // Only "real" tracked stock can be out of stock (full > 0); dropship has full 0.
+  const outOfStock = product.stock_full > 0 && product.stock_available <= 0;
 
   async function onAdd(e: React.MouseEvent) {
     e.preventDefault();
@@ -63,9 +66,18 @@ export function ProductCard({ product }: { product: ProductListItem }) {
           </div>
         )}
 
-        {discountPct > 0 && (
-          <span className="absolute left-3 top-3 z-20 bg-accent px-2.5 py-1 text-[11px] font-bold tracking-wide text-white">
-            −{discountPct}%
+        <div className="absolute left-3 top-3 z-20 flex flex-col items-start gap-1.5">
+          {product.is_flash_sale && <FlashBadge />}
+          {discountPct > 0 && (
+            <span className="bg-accent px-2.5 py-1 text-[11px] font-bold tracking-wide text-white">
+              −{discountPct}%
+            </span>
+          )}
+        </div>
+
+        {outOfStock && (
+          <span className="absolute inset-x-0 top-1/2 z-20 -translate-y-1/2 bg-ink/70 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em] text-white">
+            Sold out
           </span>
         )}
 
@@ -108,10 +120,10 @@ export function ProductCard({ product }: { product: ProductListItem }) {
           <button
             type="button"
             onClick={onAdd}
-            disabled={adding || !product.default_variant}
+            disabled={adding || !product.default_variant || outOfStock}
             className="absolute inset-x-0 bottom-0 z-20 flex h-11 items-center justify-center bg-ink text-xs font-semibold uppercase tracking-[0.1em] text-white transition-transform duration-300 ease-out-expo hover:bg-accent disabled:opacity-60 lg:translate-y-full lg:group-hover:translate-y-0"
           >
-            {adding ? "Adding…" : "Add to bag"}
+            {outOfStock ? "Sold out" : adding ? "Adding…" : "Add to bag"}
           </button>
         )}
       </div>
@@ -143,6 +155,11 @@ export function ProductCard({ product }: { product: ProductListItem }) {
             </span>
           </div>
         )}
+        <StockBar
+          available={product.stock_available}
+          full={product.stock_full}
+          className="mt-2"
+        />
       </div>
 
       {/* Stretched link navigates the whole card; the action buttons sit above it. */}

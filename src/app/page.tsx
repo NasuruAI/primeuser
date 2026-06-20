@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Reveal } from "@/components/ui/reveal";
 import { ProductCard } from "@/features/catalog/product-card";
+import { FlashSaleSection } from "@/features/home/flash-sale";
 import { Hero } from "@/features/home/hero";
 import { Newsletter } from "@/features/home/newsletter";
 import { getCategories, getProducts } from "@/lib/catalog";
@@ -18,8 +19,9 @@ const MARQUEE = [
 
 export default async function Home() {
   const currency = selectedCurrency();
-  const [products, categories, { name: storeName }] = await Promise.all([
+  const [products, flash, categories, { name: storeName }] = await Promise.all([
     getProducts({ currency }).catch(() => ({ results: [] })),
+    getProducts({ currency, flash: true }).catch(() => ({ results: [] })),
     getCategories().catch(() => []),
     getStoreConfig(),
   ]);
@@ -80,6 +82,9 @@ export default async function Home() {
           </div>
         </section>
       )}
+
+      {/* Flash sale */}
+      <FlashSaleSection products={flash.results} />
 
       {/* Featured products */}
       <section className="container-site py-16 sm:py-20">
