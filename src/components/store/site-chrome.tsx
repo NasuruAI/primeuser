@@ -12,7 +12,11 @@ export async function SiteChrome({ children }: { children: React.ReactNode }) {
   return (
     <CartProvider>
       <div className="flex min-h-screen flex-col">
-        <Header storeName={config.name} announcement={config.announcement} />
+        <Header
+          storeName={config.name}
+          logoUrl={config.logoUrl}
+          announcement={config.announcement}
+        />
         <main className="flex-1">{children}</main>
         <Footer
           storeName={config.name}

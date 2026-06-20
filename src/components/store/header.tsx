@@ -18,9 +18,11 @@ const NAV = [
 
 export function Header({
   storeName,
+  logoUrl = "",
   announcement,
 }: {
   storeName: string;
+  logoUrl?: string;
   announcement: string;
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -77,7 +79,7 @@ export function Header({
             </svg>
           </button>
 
-          <Logo storeName={storeName} />
+          <Logo storeName={storeName} logoUrl={logoUrl} />
 
           <nav className="hidden items-center gap-7 lg:flex">
             {NAV.map((item) => (

@@ -23,6 +23,8 @@ export type StoreConfig = {
   tagline: string;
   supportEmail: string;
   announcement: string;
+  /** Delivery URL of the admin-uploaded store logo, or "" to use the wordmark. */
+  logoUrl: string;
   hero: HeroConfig;
 };
 
@@ -31,6 +33,7 @@ const FALLBACK: StoreConfig = {
   tagline: "Shop the world.",
   supportEmail: "support@idealcommerce.test",
   announcement: "",
+  logoUrl: "",
   hero: {
     badge: "New season · 2026 collection",
     headline: "Shop the world, pay your way.",
@@ -60,6 +63,12 @@ export const getStoreConfig = cache(async (): Promise<StoreConfig> => {
     const str = (key: string, fallback: string) =>
       typeof s[key] === "string" && s[key] ? (s[key] as string) : fallback;
     const h = FALLBACK.hero;
+    const logoId = str("store.logo_public_id", "");
+    const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? "";
+    const logoUrl =
+      logoId && cloud
+        ? `https://res.cloudinary.com/${cloud}/image/upload/f_auto,q_auto,h_80/${logoId}`
+        : "";
     const sideImages = Array.isArray(s["hero.side_images"])
       ? (s["hero.side_images"] as unknown[]).filter(
           (u): u is string => typeof u === "string" && u.length > 0,
@@ -73,6 +82,7 @@ export const getStoreConfig = cache(async (): Promise<StoreConfig> => {
         typeof s["content.announcement"] === "string"
           ? (s["content.announcement"] as string)
           : "",
+      logoUrl,
       hero: {
         badge: str("hero.badge", h.badge),
         headline: str("hero.headline", h.headline),
