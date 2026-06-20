@@ -61,23 +61,18 @@ export default async function Home() {
               View all
             </Link>
           </Reveal>
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-4">
-            {categories.slice(0, 8).map((c, i) => (
-              <Reveal key={c.id} delay={i * 60}>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+            {categories.slice(0, 12).map((c, i) => (
+              <Reveal key={c.id} delay={i * 40}>
                 <Link
                   href={`/catalog?category=${c.slug}`}
-                  className="group flex aspect-[4/3] flex-col justify-between overflow-hidden border border-ink/10 bg-white p-5 transition-colors duration-300 hover:bg-ink"
+                  className="group flex items-center justify-between gap-2 border border-ink/10 bg-white px-4 py-3.5 transition-colors duration-300 hover:bg-ink"
                 >
-                  <span className="text-[11px] font-semibold uppercase tracking-eyebrow text-ink/40 transition-colors group-hover:text-canvas/50">
-                    0{i + 1}
+                  <span className="truncate font-display text-base font-bold text-ink transition-colors group-hover:text-canvas">
+                    {c.name}
                   </span>
-                  <span className="flex items-end justify-between">
-                    <span className="font-display text-xl font-bold text-ink transition-colors group-hover:text-canvas">
-                      {c.name}
-                    </span>
-                    <span className="text-ink/40 transition-all duration-300 group-hover:translate-x-1 group-hover:text-canvas">
-                      →
-                    </span>
+                  <span className="shrink-0 text-ink/35 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-canvas">
+                    →
                   </span>
                 </Link>
               </Reveal>
