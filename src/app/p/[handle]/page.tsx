@@ -3,10 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { JsonLd } from "@/components/seo/json-ld";
+import { Stars } from "@/components/ui/stars";
 import { ProductGallery } from "@/features/catalog/product-gallery";
+import { ProductTabs } from "@/features/catalog/product-tabs";
 import { ShareButton } from "@/features/catalog/share-button";
 import { VariantSelector } from "@/features/catalog/variant-selector";
-import { getProductByHandle } from "@/lib/catalog";
+import { getProductByHandle, getReviews } from "@/lib/catalog";
 import { selectedCurrency } from "@/lib/currency";
 import {
   SITE_LOCATION,
@@ -73,6 +75,7 @@ export default async function ProductPage({
   const product = await getProductByHandle(params.handle, selectedCurrency());
   if (!product) notFound();
 
+  const reviews = await getReviews(product.slug);
   const url = absoluteUrl(`/p/${product.slug}`);
   const inStock = product.variants.some((v) => v.in_stock);
 
@@ -89,6 +92,8 @@ export default async function ProductPage({
           price: priceFrom(product),
           currency: "NGN",
           inStock,
+          ratingValue: Number(product.rating_avg),
+          ratingCount: product.rating_count,
         })}
       />
       <JsonLd
@@ -128,17 +133,21 @@ export default async function ProductPage({
               <h1 className="mt-2 font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">
                 {product.title}
               </h1>
+              {product.rating_count > 0 && (
+                <a
+                  href="#reviews"
+                  className="mt-3 inline-flex items-center gap-2 text-sm text-ink/60 transition hover:text-ink"
+                >
+                  <Stars rating={Number(product.rating_avg)} size={15} />
+                  {Number(product.rating_avg).toFixed(1)} ({product.rating_count}{" "}
+                  review{product.rating_count === 1 ? "" : "s"})
+                </a>
+              )}
             </div>
             <ShareButton sharePath={product.share_path} />
           </div>
 
-          {product.description && (
-            <p className="mt-5 max-w-prose leading-relaxed text-ink/65">
-              {product.description}
-            </p>
-          )}
-
-          <div className="mt-8 border-t border-ink/10 pt-8">
+          <div className="mt-7 border-t border-ink/10 pt-7">
             <VariantSelector product={product} />
           </div>
 
@@ -155,6 +164,11 @@ export default async function ProductPage({
             ))}
           </ul>
         </div>
+      </div>
+
+      {/* Description · Features · Reviews */}
+      <div id="reviews" className="scroll-mt-24">
+        <ProductTabs product={product} reviews={reviews} />
       </div>
     </div>
   );

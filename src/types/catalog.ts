@@ -37,6 +37,12 @@ export type OptionType = {
   values: OptionValue[];
 };
 
+export type PriceTier = {
+  min_qty: number;
+  unit_price: string;
+  unit_price_display: MoneyDisplay | null;
+};
+
 export type Variant = {
   id: string;
   sku: string;
@@ -52,6 +58,8 @@ export type Variant = {
   /** Original (pre-discount) price, shown struck-through. Null when not discounted. */
   compare_at_display: MoneyDisplay | null;
   discount_percent: string;
+  moq: number;
+  price_tiers: PriceTier[];
 };
 
 export type ProductListItem = {
@@ -65,6 +73,8 @@ export type ProductListItem = {
   price_from_display: MoneyDisplay | null;
   compare_at_from_display: MoneyDisplay | null;
   discount_percent: string;
+  rating_avg: string;
+  rating_count: number;
   primary_image: ImageUrls | null;
   share_path: string;
   has_options: boolean;
@@ -77,13 +87,27 @@ export type ProductDetail = {
   slug: string;
   short_id: string;
   description: string;
+  features: string;
   category: Category | null;
   brand: Brand | null;
   fulfillment_type: string;
+  discount_percent: string;
+  rating_avg: string;
+  rating_count: number;
   option_types: OptionType[];
   variants: Variant[];
   images: ProductImage[];
   share_path: string;
+};
+
+export type Review = {
+  id: string;
+  author_name: string;
+  rating: number;
+  title: string;
+  body: string;
+  is_verified_purchase: boolean;
+  created_at: string;
 };
 
 export type Paginated<T> = {

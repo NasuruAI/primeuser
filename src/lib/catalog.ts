@@ -6,6 +6,7 @@ import type {
   Paginated,
   ProductDetail,
   ProductListItem,
+  Review,
 } from "@/types/catalog";
 
 export async function getCategories(): Promise<Category[]> {
@@ -44,5 +45,16 @@ export async function getProductByHandle(
   } catch (err) {
     if (err instanceof ApiRequestError && err.status === 404) return null;
     throw err;
+  }
+}
+
+export async function getReviews(slug: string): Promise<Review[]> {
+  try {
+    const data = await backendFetch<Paginated<Review>>(
+      `/catalog/products/${slug}/reviews/`,
+    );
+    return data.results;
+  } catch {
+    return [];
   }
 }

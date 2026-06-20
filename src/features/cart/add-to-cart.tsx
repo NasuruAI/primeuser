@@ -10,9 +10,11 @@ import { useCart } from "./cart-context";
 
 export function AddToCart({
   variantId,
+  quantity = 1,
   disabled,
 }: {
   variantId: string | null;
+  quantity?: number;
   disabled?: boolean;
 }) {
   const { run, openCart } = useCart();
@@ -23,8 +25,8 @@ export function AddToCart({
     if (!variantId) return;
     setState("adding");
     try {
-      await run(() => cartApi.addItem(variantId, 1));
-      toast.success("Added to cart");
+      await run(() => cartApi.addItem(variantId, Math.max(1, quantity)));
+      toast.success("Added to bag");
       openCart();
     } catch {
       // Error already surfaced as a toast by the cart context.

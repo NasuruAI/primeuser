@@ -102,6 +102,8 @@ export function productLd(opts: {
   price?: string | null;
   currency?: string;
   inStock?: boolean;
+  ratingValue?: number;
+  ratingCount?: number;
 }): Json {
   const offers: Json | undefined = opts.price
     ? {
@@ -126,6 +128,13 @@ export function productLd(opts: {
   if (opts.brand) ld.brand = { "@type": "Brand", name: opts.brand };
   if (opts.sku) ld.sku = opts.sku;
   if (offers) ld.offers = offers;
+  if (opts.ratingCount && opts.ratingValue) {
+    ld.aggregateRating = {
+      "@type": "AggregateRating",
+      ratingValue: opts.ratingValue,
+      reviewCount: opts.ratingCount,
+    };
+  }
   return ld;
 }
 
