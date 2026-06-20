@@ -129,6 +129,33 @@ export function productLd(opts: {
   return ld;
 }
 
+/** Blog article rich result. */
+export function articleLd(opts: {
+  title: string;
+  description: string;
+  url: string;
+  image?: string;
+  author?: string;
+  publishedAt?: string | null;
+  updatedAt?: string | null;
+  storeName: string;
+}): Json {
+  const ld: Json = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: opts.title,
+    description: opts.description,
+    url: opts.url,
+    mainEntityOfPage: opts.url,
+    author: { "@type": "Person", name: opts.author || opts.storeName },
+    publisher: { "@id": `${SITE_URL}/#organization` },
+  };
+  if (opts.image) ld.image = opts.image;
+  if (opts.publishedAt) ld.datePublished = opts.publishedAt;
+  if (opts.updatedAt) ld.dateModified = opts.updatedAt;
+  return ld;
+}
+
 /** Breadcrumb trail for richer SERP display. */
 export function breadcrumbLd(items: { name: string; url: string }[]): Json {
   return {

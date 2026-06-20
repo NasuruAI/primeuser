@@ -12,8 +12,8 @@ import { SearchBar } from "./search-bar";
 
 const NAV = [
   { href: "/catalog", label: "Shop" },
-  { href: "/catalog?category=apparel", label: "Apparel" },
   { href: "/catalog?sort=newest", label: "New in" },
+  { href: "/blog", label: "Journal" },
 ];
 
 export function Header({
