@@ -49,7 +49,7 @@ export function CurrencyMenu() {
       aria-label="Currency"
       value={value}
       onChange={onChange}
-      className="h-9 rounded-full border border-ink/15 bg-white px-3 text-sm text-ink focus:border-primary focus:outline-none"
+      className="h-9 cursor-pointer rounded-full bg-blush px-3 text-sm text-ink transition-colors hover:bg-primary/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
     >
       {currencies.map((c) => (
         <option key={c.code} value={c.code}>
