@@ -7,6 +7,7 @@ import { SiteChrome } from "@/components/store/site-chrome";
 import { ToastProvider } from "@/components/ui/toast";
 import { FavouritesProvider } from "@/features/favourites/favourites-context";
 import { getStoreConfig } from "@/lib/config";
+import { brandStyle } from "@/lib/theme";
 import {
   DEFAULT_KEYWORDS,
   SITE_LOCATION,
@@ -59,9 +60,14 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const { name, tagline, logoUrl, supportEmail, phone } = await getStoreConfig();
+  const { name, tagline, logoUrl, supportEmail, phone, brand } =
+    await getStoreConfig();
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+    <html
+      lang="en"
+      className={`${inter.variable} ${playfair.variable}`}
+      style={brandStyle(brand.primary, brand.accent)}
+    >
       <body className="min-h-screen font-sans">
         <JsonLd
           data={organizationLd({

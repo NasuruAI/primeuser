@@ -51,7 +51,7 @@ export function ProductCard({ product }: { product: ProductListItem }) {
 
   return (
     <div className="group relative flex flex-col">
-      <div className="relative aspect-[3/4] overflow-hidden bg-blush">
+      <div className="relative aspect-[3/4] overflow-hidden rounded-xl bg-blush">
         {product.primary_image ? (
           <Image
             src={product.primary_image.card}
@@ -69,7 +69,7 @@ export function ProductCard({ product }: { product: ProductListItem }) {
         <div className="absolute left-3 top-3 z-20 flex flex-col items-start gap-1.5">
           {product.is_flash_sale && <FlashBadge />}
           {discountPct > 0 && (
-            <span className="bg-accent px-2.5 py-1 text-[11px] font-bold tracking-wide text-white">
+            <span className="rounded-full bg-accent px-2.5 py-1 text-[11px] font-bold tracking-wide text-white">
               −{discountPct}%
             </span>
           )}

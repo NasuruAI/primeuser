@@ -27,6 +27,8 @@ export type StoreConfig = {
   logoUrl: string;
   /** Public contact phone (order_chat.phone_number), used for SEO/schema. */
   phone: string;
+  /** Admin-set brand colours (hex). */
+  brand: { primary: string; accent: string };
   hero: HeroConfig;
 };
 
@@ -37,6 +39,7 @@ const FALLBACK: StoreConfig = {
   announcement: "",
   logoUrl: "",
   phone: "",
+  brand: { primary: "#6E0D25", accent: "#C9184A" },
   hero: {
     badge: "New season · 2026 collection",
     headline: "Shop the world, pay your way.",
@@ -87,6 +90,10 @@ export const getStoreConfig = cache(async (): Promise<StoreConfig> => {
           : "",
       logoUrl,
       phone: str("order_chat.phone_number", ""),
+      brand: {
+        primary: str("branding.primary_color", FALLBACK.brand.primary),
+        accent: str("branding.accent_color", FALLBACK.brand.accent),
+      },
       hero: {
         badge: str("hero.badge", h.badge),
         headline: str("hero.headline", h.headline),

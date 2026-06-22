@@ -63,7 +63,7 @@ export function FlashSaleSection({
   if (products.length === 0) return null;
   return (
     <section className="container-site py-16 sm:py-20">
-      <div className="overflow-hidden border-2 border-yellow-400">
+      <div className="overflow-hidden rounded-2xl border-2 border-yellow-400">
         <FlashSaleBar count={products.length} href={href} />
         <div className="grid grid-cols-2 gap-x-5 gap-y-10 p-5 sm:p-7 md:grid-cols-3 lg:grid-cols-4">
           {products.slice(0, 8).map((p) => (

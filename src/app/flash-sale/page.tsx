@@ -19,7 +19,7 @@ export default async function FlashSalePage() {
 
   return (
     <div className="container-site py-8 sm:py-12">
-      <div className="overflow-hidden border-2 border-yellow-400">
+      <div className="overflow-hidden rounded-2xl border-2 border-yellow-400">
         <FlashSaleBar count={results.length} />
       </div>
 

@@ -46,7 +46,7 @@ export function StockBar({
 export function FlashBadge({ className = "" }: { className?: string }) {
   return (
     <span
-      className={`inline-flex items-center gap-1 bg-yellow-400 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-ink ${className}`}
+      className={`inline-flex items-center gap-1 rounded-full bg-yellow-400 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-ink ${className}`}
     >
       <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
         <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z" />

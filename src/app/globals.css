@@ -5,6 +5,9 @@
 :root {
   --background: #faf8f6;
   --foreground: #16161f;
+  /* Brand colour channels (R G B) — overridden inline from store settings. */
+  --brand-primary: 110 13 37; /* #6E0D25 */
+  --brand-accent: 201 24 74; /* #C9184A */
 }
 
 @layer base {

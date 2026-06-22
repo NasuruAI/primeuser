@@ -69,7 +69,7 @@ export default async function Home() {
               <Reveal key={c.id} delay={i * 40}>
                 <Link
                   href={`/catalog?category=${c.slug}`}
-                  className="group flex items-center justify-between gap-2 border border-ink/10 bg-white px-4 py-3.5 transition-colors duration-300 hover:bg-ink"
+                  className="group flex items-center justify-between gap-2 rounded-lg border border-ink/10 bg-white px-4 py-3.5 transition-colors duration-300 hover:bg-ink"
                 >
                   <span className="truncate font-display text-base font-bold text-ink transition-colors group-hover:text-canvas">
                     {c.name}
