@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
+import { SelectMenu } from "@/components/ui/select-menu";
+
 type Currency = { code: string; symbol: string };
 
 function readCookie(name: string): string | undefined {
@@ -29,8 +31,7 @@ export function CurrencyMenu() {
       .catch(() => {});
   }, []);
 
-  async function onChange(e: React.ChangeEvent<HTMLSelectElement>) {
-    const code = e.target.value;
+  async function onChange(code: string) {
     setValue(code);
     await fetch("/api/currency", {
       method: "POST",
@@ -45,17 +46,15 @@ export function CurrencyMenu() {
   if (currencies.length === 0) return null;
 
   return (
-    <select
-      aria-label="Currency"
+    <SelectMenu
+      ariaLabel="Currency"
       value={value}
       onChange={onChange}
-      className="h-9 cursor-pointer rounded-full bg-blush px-3 text-sm text-ink transition-colors hover:bg-primary/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
-    >
-      {currencies.map((c) => (
-        <option key={c.code} value={c.code}>
-          {c.code} {c.symbol}
-        </option>
-      ))}
-    </select>
+      pill
+      options={currencies.map((c) => ({
+        value: c.code,
+        label: `${c.code} ${c.symbol}`,
+      }))}
+    />
   );
 }

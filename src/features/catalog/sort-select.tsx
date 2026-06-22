@@ -2,6 +2,8 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+import { SelectMenu } from "@/components/ui/select-menu";
+
 const OPTIONS = [
   { value: "newest", label: "Newest" },
   { value: "price-asc", label: "Price: low to high" },
@@ -23,20 +25,14 @@ export function SortSelect() {
   }
 
   return (
-    <label className="flex items-center gap-2 text-sm text-ink/55">
+    <div className="flex items-center gap-2 text-sm text-ink/55">
       <span className="hidden sm:inline">Sort</span>
-      <select
-        aria-label="Sort products"
+      <SelectMenu
+        ariaLabel="Sort products"
         value={current}
-        onChange={(e) => onChange(e.target.value)}
-        className="h-9 cursor-pointer rounded-md bg-blush px-3 text-sm text-ink transition-colors hover:bg-primary/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
-      >
-        {OPTIONS.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </select>
-    </label>
+        onChange={onChange}
+        options={OPTIONS}
+      />
+    </div>
   );
 }
