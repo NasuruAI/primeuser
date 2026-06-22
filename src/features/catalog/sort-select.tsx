@@ -29,7 +29,7 @@ export function SortSelect() {
         aria-label="Sort products"
         value={current}
         onChange={(e) => onChange(e.target.value)}
-        className="h-9 border border-ink/15 bg-white px-3 text-sm text-ink focus:border-primary focus:outline-none"
+        className="h-9 cursor-pointer rounded-md bg-blush px-3 text-sm text-ink transition-colors hover:bg-primary/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
       >
         {OPTIONS.map((o) => (
           <option key={o.value} value={o.value}>
