@@ -24,15 +24,24 @@ export class ApiRequestError extends Error {
 /**
  * Server-side fetch to the backend API. Uses the internal base URL so it works
  * inside docker-compose. Parses the unified `{ "error": {...} }` envelope.
+ *
+ * Defaults to `no-store` (always fresh). Pass `opts.revalidate` (seconds) for
+ * read-only data (catalog, etc.) to serve it from Next's data cache and avoid a
+ * cross-network round-trip on every request — big TTFB win, stale-while-revalidate.
  */
 export async function backendFetch<T = unknown>(
   path: string,
   init: RequestInit = {},
+  opts: { revalidate?: number } = {},
 ): Promise<T> {
+  const cacheInit: RequestInit =
+    typeof opts.revalidate === "number"
+      ? { next: { revalidate: opts.revalidate } }
+      : { cache: "no-store" };
   const res = await fetch(`${env.serverApiBaseUrl}${path}`, {
     ...init,
     headers: { "Content-Type": "application/json", ...(init.headers ?? {}) },
-    cache: "no-store",
+    ...cacheInit,
   });
 
   if (res.status === 204 || res.status === 205) {

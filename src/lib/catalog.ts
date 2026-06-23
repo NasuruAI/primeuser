@@ -15,8 +15,14 @@ function isSoldOut(p: ProductListItem): boolean {
   return p.stock_full > 0 && p.stock_available <= 0;
 }
 
+// Read-only catalog data is cached in Next's data cache (stale-while-revalidate)
+// so most requests skip the cross-network round-trip. Admin edits appear within
+// the window below.
+const CATALOG_TTL = 60;
+const CATEGORY_TTL = 300;
+
 export async function getCategories(): Promise<Category[]> {
-  return backendFetch<Category[]>("/catalog/categories/");
+  return backendFetch<Category[]>("/catalog/categories/", {}, { revalidate: CATEGORY_TTL });
 }
 
 export async function getProducts(
@@ -36,7 +42,11 @@ export async function getProducts(
   if (params.flash) qs.set("is_flash_sale", "true");
   const suffix = qs.toString() ? `?${qs}` : "";
   const [data, { hideOutOfStock }] = await Promise.all([
-    backendFetch<Paginated<ProductListItem>>(`/catalog/products/${suffix}`),
+    backendFetch<Paginated<ProductListItem>>(
+      `/catalog/products/${suffix}`,
+      {},
+      { revalidate: CATALOG_TTL },
+    ),
     getStoreConfig(),
   ]);
   // Optionally hide sold-out products (admin setting).
@@ -56,6 +66,8 @@ export async function getProductByHandle(
   try {
     return await backendFetch<ProductDetail>(
       `/catalog/share/${handle}/${suffix}`,
+      {},
+      { revalidate: CATALOG_TTL },
     );
   } catch (err) {
     if (err instanceof ApiRequestError && err.status === 404) return null;
@@ -67,6 +79,8 @@ export async function getReviews(slug: string): Promise<Review[]> {
   try {
     const data = await backendFetch<Paginated<Review>>(
       `/catalog/products/${slug}/reviews/`,
+      {},
+      { revalidate: CATALOG_TTL },
     );
     return data.results;
   } catch {
