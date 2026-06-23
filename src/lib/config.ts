@@ -29,6 +29,8 @@ export type StoreConfig = {
   phone: string;
   /** Admin-set brand colours (hex). */
   brand: { primary: string; accent: string };
+  /** Hide out-of-stock products from the storefront. */
+  hideOutOfStock: boolean;
   hero: HeroConfig;
 };
 
@@ -40,6 +42,7 @@ const FALLBACK: StoreConfig = {
   logoUrl: "",
   phone: "",
   brand: { primary: "#6E0D25", accent: "#C9184A" },
+  hideOutOfStock: false,
   hero: {
     badge: "New season · 2026 collection",
     headline: "Shop the world, pay your way.",
@@ -98,6 +101,7 @@ export const getStoreConfig = cache(async (): Promise<StoreConfig> => {
         primary: str("branding.primary_color", FALLBACK.brand.primary),
         accent: str("branding.accent_color", FALLBACK.brand.accent),
       },
+      hideOutOfStock: s["catalog.hide_out_of_stock"] === true,
       hero: {
         // Text fields use `raw` so an admin can clear them to hide them.
         badge: raw("hero.badge", h.badge),

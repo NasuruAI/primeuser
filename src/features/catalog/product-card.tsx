@@ -75,12 +75,6 @@ export function ProductCard({ product }: { product: ProductListItem }) {
           )}
         </div>
 
-        {outOfStock && (
-          <span className="absolute inset-x-0 top-1/2 z-20 -translate-y-1/2 bg-ink/70 py-2 text-center text-xs font-semibold uppercase tracking-[0.12em] text-white">
-            Sold out
-          </span>
-        )}
-
         {/* Stock ring — count inside a brand ring that clears as stock sells */}
         <StockRing
           available={product.stock_available}
@@ -115,22 +109,24 @@ export function ProductCard({ product }: { product: ProductListItem }) {
           </svg>
         </button>
 
-        {/* Quick action — slides up on hover (always shown on touch) */}
+        {/* Quick action — compact icon button, bottom-right */}
         {product.has_options ? (
           <Link
             href={href}
-            className="absolute inset-x-0 bottom-0 z-20 flex h-11 items-center justify-center bg-ink text-xs font-semibold uppercase tracking-[0.1em] text-white transition-transform duration-300 ease-out-expo hover:bg-accent lg:translate-y-full lg:group-hover:translate-y-0"
+            aria-label={`Choose options for ${product.title}`}
+            className="absolute bottom-3 right-3 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-ink text-canvas shadow-sm transition hover:bg-primary"
           >
-            Choose options
+            <BagIcon />
           </Link>
         ) : (
           <button
             type="button"
             onClick={onAdd}
             disabled={adding || !product.default_variant || outOfStock}
-            className="absolute inset-x-0 bottom-0 z-20 flex h-11 items-center justify-center bg-ink text-xs font-semibold uppercase tracking-[0.1em] text-white transition-transform duration-300 ease-out-expo hover:bg-accent disabled:opacity-60 lg:translate-y-full lg:group-hover:translate-y-0"
+            aria-label={outOfStock ? "Sold out" : "Add to bag"}
+            className="absolute bottom-3 right-3 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-ink text-canvas shadow-sm transition hover:bg-primary disabled:opacity-50"
           >
-            {outOfStock ? "Sold out" : adding ? "Adding…" : "Add to bag"}
+            <BagIcon adding={adding} />
           </button>
         )}
       </div>
@@ -171,5 +167,31 @@ export function ProductCard({ product }: { product: ProductListItem }) {
         aria-label={product.title}
       />
     </div>
+  );
+}
+
+function BagIcon({ adding = false }: { adding?: boolean }) {
+  if (adding) {
+    return (
+      <span
+        className="h-4 w-4 animate-spin rounded-full border-2 border-canvas/40 border-t-canvas"
+        aria-hidden
+      />
+    );
+  }
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M6 7h12l-1 13H7L6 7Z" />
+      <path d="M9 7a3 3 0 0 1 6 0" />
+    </svg>
   );
 }

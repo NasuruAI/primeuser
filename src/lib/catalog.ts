@@ -1,6 +1,7 @@
 import "server-only";
 
 import { ApiRequestError, backendFetch } from "./api";
+import { getStoreConfig } from "./config";
 import type {
   Category,
   Paginated,
@@ -8,6 +9,11 @@ import type {
   ProductListItem,
   Review,
 } from "@/types/catalog";
+
+/** A tracked-stock product that's sold out (full > 0 but nothing available). */
+function isSoldOut(p: ProductListItem): boolean {
+  return p.stock_full > 0 && p.stock_available <= 0;
+}
 
 export async function getCategories(): Promise<Category[]> {
   return backendFetch<Category[]>("/catalog/categories/");
@@ -29,9 +35,16 @@ export async function getProducts(
   if (params.ordering) qs.set("ordering", params.ordering);
   if (params.flash) qs.set("is_flash_sale", "true");
   const suffix = qs.toString() ? `?${qs}` : "";
-  return backendFetch<Paginated<ProductListItem>>(
-    `/catalog/products/${suffix}`,
-  );
+  const [data, { hideOutOfStock }] = await Promise.all([
+    backendFetch<Paginated<ProductListItem>>(`/catalog/products/${suffix}`),
+    getStoreConfig(),
+  ]);
+  // Optionally hide sold-out products (admin setting).
+  if (hideOutOfStock) {
+    const kept = data.results.filter((p) => !isSoldOut(p));
+    return { ...data, results: kept, count: kept.length };
+  }
+  return data;
 }
 
 /** Resolve a product by share handle (slug or short_id) — used by /p/<handle>. */
