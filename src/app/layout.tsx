@@ -69,6 +69,9 @@ export default async function RootLayout({
       style={brandStyle(brand.primary, brand.accent)}
     >
       <body className="min-h-screen font-sans">
+        {/* Warm up the image CDN connection early for a faster LCP image. */}
+        <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         <JsonLd
           data={organizationLd({
             name,
