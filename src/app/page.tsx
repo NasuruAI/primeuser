@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { Reveal } from "@/components/ui/reveal";
@@ -55,12 +56,23 @@ export default async function Home() {
               <Reveal key={c.id} delay={i * 40}>
                 <Link
                   href={`/catalog?category=${c.slug}`}
-                  className="group flex items-center justify-between gap-2 rounded-lg border border-ink/10 bg-white px-4 py-3.5 transition-colors duration-300 hover:bg-ink"
+                  className="group flex items-center gap-3 rounded-lg border border-ink/10 bg-white p-2 pr-3 transition-colors duration-300 hover:bg-ink"
                 >
-                  <span className="truncate font-display text-base font-bold text-ink transition-colors group-hover:text-canvas">
+                  <span className="h-11 w-11 shrink-0 overflow-hidden rounded-md bg-blush">
+                    {c.image && (
+                      <Image
+                        src={c.image.thumb}
+                        alt=""
+                        width={44}
+                        height={44}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    )}
+                  </span>
+                  <span className="truncate font-display text-sm font-bold text-ink transition-colors group-hover:text-canvas">
                     {c.name}
                   </span>
-                  <span className="shrink-0 text-ink/35 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-canvas">
+                  <span className="ml-auto shrink-0 text-ink/35 transition-all duration-300 group-hover:translate-x-0.5 group-hover:text-canvas">
                     →
                   </span>
                 </Link>
