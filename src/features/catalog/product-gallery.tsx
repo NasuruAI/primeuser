@@ -70,11 +70,11 @@ export function ProductGallery({
   }
 
   return (
-    <div className="flex flex-col-reverse gap-3 sm:flex-row sm:gap-4">
-      {/* Thumbnail filmstrip — horizontal under the image on mobile, a vertical
-          rail beside it on desktop */}
+    <div className="flex w-full min-w-0 flex-col gap-3 sm:flex-row sm:gap-4">
+      {/* Thumbnail filmstrip — horizontal under the image on mobile (order-2),
+          a vertical rail to the left on desktop (order-1). */}
       {count > 1 && (
-        <div className="hide-scrollbar flex gap-2 overflow-x-auto sm:max-h-[72vh] sm:w-16 sm:flex-col sm:overflow-y-auto lg:w-20">
+        <div className="hide-scrollbar order-2 flex w-full gap-2 overflow-x-auto sm:order-1 sm:max-h-[72vh] sm:w-16 sm:flex-col sm:overflow-x-visible sm:overflow-y-auto lg:w-20">
           {images.map((img, i) => (
             <button
               key={img.id}
@@ -100,9 +100,10 @@ export function ProductGallery({
         </div>
       )}
 
-      {/* Main image — swipeable, click to expand */}
+      {/* Main image — full-width square on mobile (order-1, no flex so the
+          aspect ratio governs height); flexes to fill the row on desktop. */}
       <div
-        className="group relative aspect-square max-h-[72vh] w-full flex-1 select-none overflow-hidden rounded-xl border border-ink/10 bg-white"
+        className="group relative order-1 aspect-square w-full min-w-0 select-none overflow-hidden rounded-xl border border-ink/10 bg-white sm:order-2 sm:max-h-[72vh] sm:flex-1"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >

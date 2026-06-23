@@ -118,12 +118,12 @@ export default async function ProductPage({
 
       <div className="grid gap-6 lg:grid-cols-[1.15fr_1fr] lg:items-start lg:gap-10 xl:gap-14">
         {/* Gallery — stays in view while the details scroll on desktop */}
-        <div className="lg:sticky lg:top-24">
+        <div className="min-w-0 lg:sticky lg:top-24">
           <ProductGallery images={product.images} title={product.title} />
         </div>
 
         {/* Details */}
-        <div className="lg:py-1">
+        <div className="min-w-0 lg:py-1">
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="flex items-center gap-2">
