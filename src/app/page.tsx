@@ -49,16 +49,7 @@ export default async function Home() {
 
       {/* Categories */}
       {categories.length > 0 && (
-        <section className="container-site pt-10 sm:pt-12">
-          <Reveal className="mb-5 flex items-center justify-between">
-            <span className="eyebrow">Browse</span>
-            <Link
-              href="/catalog"
-              className="link-underline text-sm font-medium uppercase tracking-[0.08em] text-ink/70 hover:text-ink"
-            >
-              View all
-            </Link>
-          </Reveal>
+        <section className="container-site pt-4 sm:pt-5">
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
             {categories.slice(0, 12).map((c, i) => (
               <Reveal key={c.id} delay={i * 40}>
