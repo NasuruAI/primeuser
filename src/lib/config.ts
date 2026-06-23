@@ -68,6 +68,10 @@ export const getStoreConfig = cache(async (): Promise<StoreConfig> => {
     const s = data.settings ?? {};
     const str = (key: string, fallback: string) =>
       typeof s[key] === "string" && s[key] ? (s[key] as string) : fallback;
+    // Like `str` but preserves an explicitly-cleared (empty) admin value — so
+    // emptying a hero text in the admin actually hides it (no fallback).
+    const raw = (key: string, fallback: string) =>
+      typeof s[key] === "string" ? (s[key] as string) : fallback;
     const h = FALLBACK.hero;
     const logoId = str("store.logo_public_id", "");
     const cloud = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME ?? "";
@@ -95,12 +99,13 @@ export const getStoreConfig = cache(async (): Promise<StoreConfig> => {
         accent: str("branding.accent_color", FALLBACK.brand.accent),
       },
       hero: {
-        badge: str("hero.badge", h.badge),
-        headline: str("hero.headline", h.headline),
-        subtext: str("hero.subtext", h.subtext),
-        ctaPrimaryLabel: str("hero.cta_primary_label", h.ctaPrimaryLabel),
+        // Text fields use `raw` so an admin can clear them to hide them.
+        badge: raw("hero.badge", h.badge),
+        headline: raw("hero.headline", h.headline),
+        subtext: raw("hero.subtext", h.subtext),
+        ctaPrimaryLabel: raw("hero.cta_primary_label", h.ctaPrimaryLabel),
         ctaPrimaryHref: str("hero.cta_primary_href", h.ctaPrimaryHref),
-        ctaSecondaryLabel: str("hero.cta_secondary_label", h.ctaSecondaryLabel),
+        ctaSecondaryLabel: raw("hero.cta_secondary_label", h.ctaSecondaryLabel),
         ctaSecondaryHref: str("hero.cta_secondary_href", h.ctaSecondaryHref),
         backgroundUrl: str("hero.background_url", ""),
         overlayOpacity:

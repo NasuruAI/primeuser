@@ -81,9 +81,11 @@ export function HeroClient({
               </span>
             </div>
           )}
-          <h1 className="font-display text-3xl font-bold leading-[1.02] tracking-[-0.01em] sm:text-5xl sm:leading-[0.98] lg:text-7xl">
-            {hero.headline}
-          </h1>
+          {hero.headline && (
+            <h1 className="font-display text-3xl font-bold leading-[1.02] tracking-[-0.01em] sm:text-5xl sm:leading-[0.98] lg:text-7xl">
+              {hero.headline}
+            </h1>
+          )}
           {hero.subtext && (
             <p className="mt-4 hidden max-w-md text-lg leading-relaxed text-blush/75 sm:block">
               {hero.subtext}
