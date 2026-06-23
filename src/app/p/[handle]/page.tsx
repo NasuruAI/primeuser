@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 
 import { JsonLd } from "@/components/seo/json-ld";
 import { Stars } from "@/components/ui/stars";
-import { FlashBadge, StockBar } from "@/components/ui/stock-bar";
+import { FlashBadge, StockRing } from "@/components/ui/stock-ring";
 import { ProductGallery } from "@/features/catalog/product-gallery";
 import { ProductTabs } from "@/features/catalog/product-tabs";
 import { ShareButton } from "@/features/catalog/share-button";
@@ -152,11 +152,17 @@ export default async function ProductPage({
           </div>
 
           {product.stock_full > 0 && (
-            <StockBar
-              available={product.stock_available}
-              full={product.stock_full}
-              className="mt-6 max-w-xs"
-            />
+            <div className="mt-6 flex items-center gap-3">
+              <StockRing
+                available={product.stock_available}
+                full={product.stock_full}
+              />
+              <span className="text-sm text-ink/55">
+                {product.stock_available > 0
+                  ? `${product.stock_available} in stock`
+                  : "Out of stock"}
+              </span>
+            </div>
           )}
 
           <div className="mt-7 border-t border-ink/10 pt-7">

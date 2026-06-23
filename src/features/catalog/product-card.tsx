@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { Stars } from "@/components/ui/stars";
-import { FlashBadge, StockBar } from "@/components/ui/stock-bar";
+import { FlashBadge, StockRing } from "@/components/ui/stock-ring";
 import { useToast } from "@/components/ui/toast";
 import { useCart } from "@/features/cart/cart-context";
 import { useFavourites } from "@/features/favourites/favourites-context";
@@ -81,6 +81,13 @@ export function ProductCard({ product }: { product: ProductListItem }) {
           </span>
         )}
 
+        {/* Stock ring — count inside a brand ring that clears as stock sells */}
+        <StockRing
+          available={product.stock_available}
+          full={product.stock_full}
+          className="absolute bottom-3 left-3 z-20 shadow-sm"
+        />
+
         {/* Wishlist — reveals on hover (always visible on touch) */}
         <button
           type="button"
@@ -141,7 +148,7 @@ export function ProductCard({ product }: { product: ProductListItem }) {
           <div className="mt-0.5 flex items-baseline gap-2">
             <span className="text-sm font-semibold text-ink">{price}</span>
             {compareAt && (
-              <span className="text-xs text-ink/40 line-through">
+              <span className="text-xs text-red-500 line-through">
                 {compareAt}
               </span>
             )}
@@ -155,11 +162,6 @@ export function ProductCard({ product }: { product: ProductListItem }) {
             </span>
           </div>
         )}
-        <StockBar
-          available={product.stock_available}
-          full={product.stock_full}
-          className="mt-2"
-        />
       </div>
 
       {/* Stretched link navigates the whole card; the action buttons sit above it. */}

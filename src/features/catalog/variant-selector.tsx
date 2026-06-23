@@ -140,7 +140,7 @@ export function VariantSelector({ product }: { product: ProductDetail }) {
                     <span className="text-sm text-ink/45">/ unit</span>
                   )}
                   {selectedVariant.compare_at_display && (
-                    <span className="text-lg text-ink/40 line-through">
+                    <span className="text-lg text-red-500 line-through">
                       {selectedVariant.compare_at_display.formatted}
                     </span>
                   )}
