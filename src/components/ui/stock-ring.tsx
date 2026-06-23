@@ -23,41 +23,48 @@ export function StockRing({
 
   return (
     <div
-      className={`relative h-10 w-10 ${className}`}
+      className={`h-10 w-10 ${className}`}
       title={out ? "Out of stock" : `${available} left`}
       aria-label={out ? "Out of stock" : `${available} in stock`}
     >
-      <svg viewBox="0 0 40 40" className="h-full w-full -rotate-90 text-primary">
-        {/* solid disc so the count stays legible over the product image */}
-        <circle cx="20" cy="20" r={R + 2.5} fill="white" />
-        {/* faint full track */}
-        <circle
-          cx="20"
-          cy="20"
-          r={R}
-          fill="none"
-          stroke="currentColor"
-          strokeOpacity={0.15}
-          strokeWidth={3}
-        />
-        {/* remaining-stock arc (brand colour) */}
-        {!out && (
+      {/* inner wrapper owns the positioning context for the count, so the
+          caller's className fully controls where the ring sits */}
+      <div className="relative h-full w-full">
+        <svg
+          viewBox="0 0 40 40"
+          className="h-full w-full -rotate-90 text-primary"
+        >
+          {/* solid disc so the count stays legible over the product image */}
+          <circle cx="20" cy="20" r={R + 2.5} fill="white" />
+          {/* faint full track */}
           <circle
             cx="20"
             cy="20"
             r={R}
             fill="none"
             stroke="currentColor"
+            strokeOpacity={0.15}
             strokeWidth={3}
-            strokeLinecap="round"
-            strokeDasharray={`${dash} ${C - dash}`}
-            className="transition-[stroke-dasharray] duration-500"
           />
-        )}
-      </svg>
-      <span className="absolute inset-0 flex items-center justify-center text-[11px] font-bold tabular-nums text-ink">
-        {available}
-      </span>
+          {/* remaining-stock arc (brand colour) */}
+          {!out && (
+            <circle
+              cx="20"
+              cy="20"
+              r={R}
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={3}
+              strokeLinecap="round"
+              strokeDasharray={`${dash} ${C - dash}`}
+              className="transition-[stroke-dasharray] duration-500"
+            />
+          )}
+        </svg>
+        <span className="absolute inset-0 flex items-center justify-center text-[11px] font-bold tabular-nums text-ink">
+          {available}
+        </span>
+      </div>
     </div>
   );
 }
