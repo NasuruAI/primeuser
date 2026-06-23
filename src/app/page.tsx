@@ -49,17 +49,12 @@ export default async function Home() {
 
       {/* Categories */}
       {categories.length > 0 && (
-        <section className="container-site pt-16 sm:pt-20">
-          <Reveal className="mb-8 flex items-end justify-between">
-            <div>
-              <span className="eyebrow">Browse</span>
-              <h2 className="mt-2 font-display text-3xl font-bold text-ink sm:text-4xl">
-                Shop by category
-              </h2>
-            </div>
+        <section className="container-site pt-10 sm:pt-12">
+          <Reveal className="mb-5 flex items-center justify-between">
+            <span className="eyebrow">Browse</span>
             <Link
               href="/catalog"
-              className="link-underline hidden text-sm font-medium uppercase tracking-[0.08em] text-ink/70 hover:text-ink sm:block"
+              className="link-underline text-sm font-medium uppercase tracking-[0.08em] text-ink/70 hover:text-ink"
             >
               View all
             </Link>
@@ -88,14 +83,9 @@ export default async function Home() {
       <FlashSaleSection products={flash.results} />
 
       {/* Featured products */}
-      <section className="container-site py-16 sm:py-20">
-        <Reveal className="mb-9 flex items-end justify-between">
-          <div>
-            <span className="eyebrow">Curated</span>
-            <h2 className="mt-2 font-display text-3xl font-bold text-ink sm:text-4xl">
-              Featured this week
-            </h2>
-          </div>
+      <section className="container-site py-10 sm:py-12">
+        <Reveal className="mb-5 flex items-center justify-between">
+          <span className="eyebrow">Curated</span>
           <Link
             href="/catalog"
             className="link-underline text-sm font-medium uppercase tracking-[0.08em] text-ink/70 hover:text-ink"
