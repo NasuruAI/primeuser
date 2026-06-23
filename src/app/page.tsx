@@ -83,17 +83,7 @@ export default async function Home() {
       <FlashSaleSection products={flash.results} />
 
       {/* Featured products */}
-      <section className="container-site py-10 sm:py-12">
-        <Reveal className="mb-5 flex items-center justify-between">
-          <span className="eyebrow">Curated</span>
-          <Link
-            href="/catalog"
-            className="link-underline text-sm font-medium uppercase tracking-[0.08em] text-ink/70 hover:text-ink"
-          >
-            View all
-          </Link>
-        </Reveal>
-
+      <section className="container-site pb-12 pt-6 sm:pb-16">
         {featured.length === 0 ? (
           <p className="border border-dashed border-ink/15 bg-white p-10 text-center text-ink/50">
             No products yet. Add products in the admin to see them here.

@@ -1,7 +1,8 @@
 /**
- * "Items left" indicator: a bar that's full when freshly stocked and depletes
- * as units sell, plus the remaining count. Renders nothing for products without
- * tracked stock (e.g. dropship), where `full` is 0.
+ * "Items left" indicator: a very thin line that fills with remaining stock, with
+ * the count riding at the line's tip — so the number slides left as units sell,
+ * until it's out of stock. Renders nothing for products without tracked stock
+ * (e.g. dropship), where `full` is 0.
  */
 export function StockBar({
   available,
@@ -14,29 +15,44 @@ export function StockBar({
 }) {
   if (full <= 0) return null;
 
-  const out = available <= 0;
-  const pct = out ? 0 : Math.max(6, Math.round((available / full) * 100));
-  const low = !out && available / full <= 0.25;
+  if (available <= 0) {
+    return (
+      <div className={className}>
+        <span className="text-[10px] font-semibold uppercase tracking-wide text-ink/40">
+          Out of stock
+        </span>
+      </div>
+    );
+  }
 
-  const color = out ? "bg-ink/20" : low ? "bg-accent" : "bg-green-500";
+  const ratio = Math.min(1, available / full);
+  const pct = Math.max(3, Math.round(ratio * 100)); // fill + tip position
+  const low = ratio <= 0.25;
+  const labelPos = Math.min(93, Math.max(7, pct)); // keep the number readable at the extremes
+  const fill = low ? "bg-accent" : "bg-green-500";
+  const text = low ? "text-accent" : "text-ink/60";
 
   return (
     <div className={className}>
-      <div className="flex items-center justify-between text-[11px]">
-        {out ? (
-          <span className="font-semibold uppercase tracking-wide text-ink/45">
-            Out of stock
-          </span>
-        ) : (
-          <span className={low ? "font-semibold text-accent" : "text-ink/55"}>
-            {low ? `Only ${available} left` : `${available} left`}
-          </span>
-        )}
-      </div>
-      <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-ink/10">
-        <div
-          className={`h-full rounded-full transition-all ${color}`}
+      <div className="relative h-4">
+        {/* count, riding just above the tip */}
+        <span
+          className={`absolute top-0 -translate-x-1/2 text-[10px] font-semibold tabular-nums ${text}`}
+          style={{ left: `${labelPos}%` }}
+        >
+          {available}
+        </span>
+        {/* full-width hairline track */}
+        <span className="absolute inset-x-0 bottom-1 h-px bg-ink/10" />
+        {/* filled portion */}
+        <span
+          className={`absolute bottom-1 left-0 h-px ${fill} transition-all duration-500`}
           style={{ width: `${pct}%` }}
+        />
+        {/* tip marker */}
+        <span
+          className={`absolute bottom-1 h-1.5 w-1.5 -translate-x-1/2 translate-y-1/2 rounded-full ${fill} transition-all duration-500`}
+          style={{ left: `${pct}%` }}
         />
       </div>
     </div>

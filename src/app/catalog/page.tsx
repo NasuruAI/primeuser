@@ -50,7 +50,7 @@ export default async function CatalogPage({
 
   const heading = searchParams.search
     ? `“${searchParams.search}”`
-    : (activeCategory?.name ?? "The collection");
+    : (activeCategory?.name ?? null);
 
   return (
     <div className="container-site py-10 sm:py-14">
@@ -62,9 +62,11 @@ export default async function CatalogPage({
           <span className="px-2">/</span>
           <span className="text-ink/70">{activeCategory?.name ?? "Shop"}</span>
         </nav>
-        <h1 className="font-display text-4xl font-bold text-ink sm:text-5xl">
-          {heading}
-        </h1>
+        {heading && (
+          <h1 className="font-display text-4xl font-bold text-ink sm:text-5xl">
+            {heading}
+          </h1>
+        )}
         {searchParams.search && (
           <Link
             href="/catalog"
