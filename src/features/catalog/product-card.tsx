@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { Stars } from "@/components/ui/stars";
-import { FlashBadge, StockRing } from "@/components/ui/stock-ring";
+import { FlashBadge } from "@/components/ui/stock-ring";
 import { useToast } from "@/components/ui/toast";
 import { useCart } from "@/features/cart/cart-context";
 import { useFavourites } from "@/features/favourites/favourites-context";
@@ -75,20 +75,13 @@ export function ProductCard({ product }: { product: ProductListItem }) {
           )}
         </div>
 
-        {/* Stock ring — count inside a brand ring that clears as stock sells */}
-        <StockRing
-          available={product.stock_available}
-          full={product.stock_full}
-          className="absolute bottom-3 left-3 z-20 shadow-sm"
-        />
-
         {/* Wishlist — reveals on hover (always visible on touch) */}
         <button
           type="button"
           onClick={onToggleFav}
           aria-label={fav ? "Remove from favourites" : "Add to favourites"}
           aria-pressed={fav}
-          className={`absolute right-3 top-3 z-20 inline-flex h-9 w-9 items-center justify-center bg-white/85 backdrop-blur transition duration-300 hover:bg-white lg:opacity-0 lg:group-hover:opacity-100 ${
+          className={`absolute right-3 top-3 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/85 backdrop-blur transition duration-300 hover:bg-white lg:opacity-0 lg:group-hover:opacity-100 ${
             fav ? "opacity-100" : ""
           }`}
         >
@@ -114,7 +107,7 @@ export function ProductCard({ product }: { product: ProductListItem }) {
           <Link
             href={href}
             aria-label={`Choose options for ${product.title}`}
-            className="absolute bottom-3 right-3 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-ink text-canvas shadow-sm transition hover:bg-primary"
+            className="absolute bottom-3 right-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-ink text-canvas shadow-sm transition hover:bg-primary"
           >
             <BagIcon />
           </Link>
@@ -124,7 +117,7 @@ export function ProductCard({ product }: { product: ProductListItem }) {
             onClick={onAdd}
             disabled={adding || !product.default_variant || outOfStock}
             aria-label={outOfStock ? "Sold out" : "Add to bag"}
-            className="absolute bottom-3 right-3 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-ink text-canvas shadow-sm transition hover:bg-primary disabled:opacity-50"
+            className="absolute bottom-3 right-3 z-20 flex h-8 w-8 items-center justify-center rounded-full bg-ink text-canvas shadow-sm transition hover:bg-primary disabled:opacity-50"
           >
             <BagIcon adding={adding} />
           </button>
