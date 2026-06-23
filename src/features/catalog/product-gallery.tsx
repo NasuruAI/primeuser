@@ -70,10 +70,39 @@ export function ProductGallery({
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col-reverse gap-3 sm:flex-row sm:gap-4">
+      {/* Thumbnail filmstrip — horizontal under the image on mobile, a vertical
+          rail beside it on desktop */}
+      {count > 1 && (
+        <div className="hide-scrollbar flex gap-2 overflow-x-auto sm:max-h-[72vh] sm:w-16 sm:flex-col sm:overflow-y-auto lg:w-20">
+          {images.map((img, i) => (
+            <button
+              key={img.id}
+              type="button"
+              onClick={() => setActive(i)}
+              aria-label={`View image ${i + 1}`}
+              aria-pressed={i === active}
+              className={`relative aspect-square w-16 shrink-0 overflow-hidden rounded-lg border bg-white transition sm:w-full ${
+                i === active
+                  ? "border-primary ring-1 ring-primary"
+                  : "border-ink/10 hover:border-ink/40"
+              }`}
+            >
+              <Image
+                src={img.urls.thumb}
+                alt={img.alt_text || `${title} thumbnail ${i + 1}`}
+                fill
+                sizes="80px"
+                className="object-cover"
+              />
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Main image — swipeable, click to expand */}
       <div
-        className="group relative aspect-square max-h-[68vh] w-full select-none overflow-hidden border border-ink/10 bg-white"
+        className="group relative aspect-square max-h-[72vh] w-full flex-1 select-none overflow-hidden rounded-xl border border-ink/10 bg-white"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
@@ -87,7 +116,7 @@ export function ProductGallery({
           src={current.urls.detail}
           alt={current.alt_text || title}
           fill
-          sizes="(max-width: 1024px) 100vw, 50vw"
+          sizes="(max-width: 1024px) 100vw, 45vw"
           className="object-contain transition-transform duration-300"
           priority
         />
@@ -119,34 +148,6 @@ export function ProductGallery({
           </>
         )}
       </div>
-
-      {/* Thumbnails */}
-      {count > 1 && (
-        <div className="grid grid-cols-5 gap-2 sm:gap-3">
-          {images.map((img, i) => (
-            <button
-              key={img.id}
-              type="button"
-              onClick={() => setActive(i)}
-              aria-label={`View image ${i + 1}`}
-              aria-pressed={i === active}
-              className={`relative aspect-square overflow-hidden border bg-white transition ${
-                i === active
-                  ? "border-primary ring-1 ring-primary"
-                  : "border-ink/10 hover:border-ink/30"
-              }`}
-            >
-              <Image
-                src={img.urls.thumb}
-                alt={img.alt_text || `${title} thumbnail ${i + 1}`}
-                fill
-                sizes="120px"
-                className="object-cover"
-              />
-            </button>
-          ))}
-        </div>
-      )}
 
       {/* Lightbox — click anywhere outside the image (or Esc) to close */}
       {zoomed && (

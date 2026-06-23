@@ -116,14 +116,14 @@ export default async function ProductPage({
         <span className="text-ink/70">{product.title}</span>
       </nav>
 
-      <div className="grid gap-8 lg:grid-cols-2 lg:items-start lg:gap-14">
+      <div className="grid gap-6 lg:grid-cols-[1.15fr_1fr] lg:items-start lg:gap-10 xl:gap-14">
         {/* Gallery — stays in view while the details scroll on desktop */}
         <div className="lg:sticky lg:top-24">
           <ProductGallery images={product.images} title={product.title} />
         </div>
 
         {/* Details */}
-        <div className="lg:py-2">
+        <div className="lg:py-1">
           <div className="flex items-start justify-between gap-4">
             <div>
               <div className="flex items-center gap-2">
@@ -134,7 +134,7 @@ export default async function ProductPage({
                   </p>
                 )}
               </div>
-              <h1 className="mt-2 font-display text-4xl font-bold leading-tight text-ink sm:text-5xl">
+              <h1 className="mt-1.5 font-display text-2xl font-bold leading-tight text-ink sm:text-3xl lg:text-4xl">
                 {product.title}
               </h1>
               {product.rating_count > 0 && (
@@ -152,7 +152,7 @@ export default async function ProductPage({
           </div>
 
           {product.stock_full > 0 && (
-            <div className="mt-6 flex items-center gap-3">
+            <div className="mt-4 flex items-center gap-3">
               <StockRing
                 available={product.stock_available}
                 full={product.stock_full}
@@ -165,11 +165,11 @@ export default async function ProductPage({
             </div>
           )}
 
-          <div className="mt-7 border-t border-ink/10 pt-7">
+          <div className="mt-5 border-t border-ink/10 pt-5">
             <VariantSelector product={product} />
           </div>
 
-          <ul className="mt-8 grid grid-cols-1 gap-3 border-t border-ink/10 pt-8 text-sm text-ink/65 sm:grid-cols-3">
+          <ul className="mt-6 grid grid-cols-1 gap-3 border-t border-ink/10 pt-6 text-sm text-ink/65 sm:grid-cols-3">
             {[
               { t: "Free shipping", d: "On qualifying orders" },
               { t: "Easy returns", d: "Within 30 days" },
