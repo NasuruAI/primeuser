@@ -42,6 +42,8 @@ export function CheckoutForm() {
   const [newAddress, setNewAddress] = useState<AddressDraft>(EMPTY_ADDRESS);
   const [saveNew, setSaveNew] = useState(true);
   const [contactEmail, setContactEmail] = useState("");
+  const [coupon, setCoupon] = useState("");
+  const [couponBusy, setCouponBusy] = useState(false);
 
   useEffect(() => {
     cartApi
@@ -64,6 +66,40 @@ export function CheckoutForm() {
   }, []);
 
   const usingNew = selected === NEW;
+
+  async function refreshCart() {
+    const fresh = await cartApi.get().catch(() => null);
+    if (fresh) setCart(fresh);
+    window.dispatchEvent(new Event("ic:cart-refresh"));
+  }
+
+  async function applyCoupon() {
+    const code = coupon.trim();
+    if (!code) return;
+    setCouponBusy(true);
+    try {
+      await cartApi.applyCoupon(code);
+      toast.success(`Coupon “${code}” applied`);
+      setCoupon("");
+      await refreshCart();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "That coupon couldn’t be applied.");
+    } finally {
+      setCouponBusy(false);
+    }
+  }
+
+  async function removeCoupon(code: string) {
+    setCouponBusy(true);
+    try {
+      await cartApi.removeCoupon(code);
+      await refreshCart();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Couldn’t remove that coupon.");
+    } finally {
+      setCouponBusy(false);
+    }
+  }
 
   async function placeAndPay() {
     // Validate the destination before hitting the gateway.
@@ -273,10 +309,47 @@ export function CheckoutForm() {
             key={d.code}
             className="flex justify-between text-sm text-green-700"
           >
-            <span>{d.code}</span>
+            <span className="inline-flex items-center gap-1.5">
+              <span className="rounded bg-green-100 px-2 py-0.5 text-xs font-medium">
+                {d.code}
+              </span>
+              <button
+                type="button"
+                aria-label={`Remove ${d.code}`}
+                className="text-ink/30 transition hover:text-accent"
+                disabled={couponBusy}
+                onClick={() => removeCoupon(d.code)}
+              >
+                ✕
+              </button>
+            </span>
             <span>−{d.amount_display.formatted}</span>
           </div>
         ))}
+
+        {/* Coupon */}
+        <div className="flex gap-2">
+          <Input
+            placeholder="Coupon code"
+            value={coupon}
+            onChange={(e) => setCoupon(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                applyCoupon();
+              }
+            }}
+          />
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={applyCoupon}
+            disabled={couponBusy || !coupon.trim()}
+          >
+            {couponBusy ? "…" : "Apply"}
+          </Button>
+        </div>
+
         <div className="flex justify-between border-t border-ink/10 pt-4 text-base font-semibold text-ink">
           <span>Total</span>
           <span>{cart.total.formatted}</span>
