@@ -22,6 +22,7 @@ export async function SiteChrome({ children }: { children: React.ReactNode }) {
           storeName={config.name}
           tagline={config.tagline}
           supportEmail={config.supportEmail}
+          socialLinks={config.socialLinks}
         />
       </div>
       <CartDrawer />

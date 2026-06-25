@@ -31,8 +31,20 @@ export type StoreConfig = {
   brand: { primary: string; accent: string };
   /** Hide out-of-stock products from the storefront. */
   hideOutOfStock: boolean;
+  /** Footer social links (admin-configured). */
+  socialLinks: SocialLink[];
   hero: HeroConfig;
 };
+
+export type SocialLink = { name: string; url: string; icon: string };
+
+const DEFAULT_SOCIAL_LINKS: SocialLink[] = [
+  { name: "Instagram", url: "https://instagram.com", icon: "instagram" },
+  { name: "Facebook", url: "https://facebook.com", icon: "facebook" },
+  { name: "TikTok", url: "https://tiktok.com", icon: "tiktok" },
+  { name: "YouTube", url: "https://youtube.com", icon: "youtube" },
+  { name: "Pinterest", url: "https://pinterest.com", icon: "pinterest" },
+];
 
 const FALLBACK: StoreConfig = {
   name: "IdealCommerce",
@@ -43,6 +55,7 @@ const FALLBACK: StoreConfig = {
   phone: "",
   brand: { primary: "#6E0D25", accent: "#C9184A" },
   hideOutOfStock: false,
+  socialLinks: DEFAULT_SOCIAL_LINKS,
   hero: {
     badge: "New season · 2026 collection",
     headline: "Shop the world, pay your way.",
@@ -102,6 +115,21 @@ export const getStoreConfig = cache(async (): Promise<StoreConfig> => {
         accent: str("branding.accent_color", FALLBACK.brand.accent),
       },
       hideOutOfStock: s["catalog.hide_out_of_stock"] === true,
+      socialLinks: Array.isArray(s["footer.social_links"])
+        ? (s["footer.social_links"] as unknown[])
+            .filter(
+              (x): x is SocialLink =>
+                typeof x === "object" &&
+                x !== null &&
+                typeof (x as SocialLink).url === "string" &&
+                (x as SocialLink).url.length > 0,
+            )
+            .map((x) => ({
+              name: String(x.name ?? ""),
+              url: String(x.url),
+              icon: String(x.icon ?? "link"),
+            }))
+        : DEFAULT_SOCIAL_LINKS,
       hero: {
         // Text fields use `raw` so an admin can clear them to hide them.
         badge: raw("hero.badge", h.badge),
