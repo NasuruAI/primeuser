@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 // Branded social-share card (shown when the homepage URL is shared).
 export default async function OpengraphImage() {
-  let name = "Prime Clothings";
+  let name = "Nasuru Clothings";
   let tagline = "";
   try {
     const cfg = await getStoreConfig();
