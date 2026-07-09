@@ -10,10 +10,10 @@ import {
   AddressDraft,
   AddressFields,
   EMPTY_ADDRESS,
-  isAddressComplete,
 } from "@/features/account/address-fields";
 import { OrderChatButton } from "@/features/order-chat/order-chat-button";
 import { OrderSummary } from "@/features/orders/order-summary";
+import { ApiError, errorMessage } from "@/lib/api-error";
 import { addressApi } from "@/lib/address-client";
 import { cartApi } from "@/lib/cart-client";
 import { checkoutApi } from "@/lib/checkout-client";
@@ -28,6 +28,31 @@ function summarise(a: Address): string {
 }
 
 const NEW = "__new__";
+
+// Required destination fields, in the order we'd ask for them.
+const REQUIRED_ADDRESS: { key: keyof AddressDraft; label: string }[] = [
+  { key: "name", label: "full name" },
+  { key: "line1", label: "address" },
+  { key: "city", label: "city" },
+  { key: "country", label: "country" },
+];
+
+function firstMissingAddressField(a: AddressDraft): string | null {
+  const missing = REQUIRED_ADDRESS.find((f) => !String(a[f.key]).trim());
+  return missing ? missing.label : null;
+}
+
+function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
+// Backend error codes that mean "your bag changed — go review it".
+const BAG_ERROR_CODES = new Set([
+  "empty_cart",
+  "cart_invalid",
+  "variant_unavailable",
+  "insufficient_stock",
+]);
 
 export function CheckoutForm() {
   const [cart, setCart] = useState<Cart | null>(null);
@@ -44,6 +69,11 @@ export function CheckoutForm() {
   const [contactEmail, setContactEmail] = useState("");
   const [coupon, setCoupon] = useState("");
   const [couponBusy, setCouponBusy] = useState(false);
+  // A single, specific, actionable error shown at the top of the form.
+  const [formError, setFormError] = useState<{
+    message: string;
+    reviewBag?: boolean;
+  } | null>(null);
 
   useEffect(() => {
     cartApi
@@ -83,7 +113,7 @@ export function CheckoutForm() {
       setCoupon("");
       await refreshCart();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "That coupon couldn’t be applied.");
+      toast.error(errorMessage(e, "That coupon couldn’t be applied."));
     } finally {
       setCouponBusy(false);
     }
@@ -95,18 +125,31 @@ export function CheckoutForm() {
       await cartApi.removeCoupon(code);
       await refreshCart();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Couldn’t remove that coupon.");
+      toast.error(errorMessage(e, "Couldn’t remove that coupon."));
     } finally {
       setCouponBusy(false);
     }
   }
 
+  function fail(message: string, reviewBag = false) {
+    setFormError({ message, reviewBag });
+    toast.error(message);
+    if (typeof window !== "undefined")
+      window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
   async function placeAndPay() {
-    // Validate the destination before hitting the gateway.
-    if (usingNew && !isAddressComplete(newAddress)) {
-      toast.error("Please fill in name, address, city and country.");
-      return;
+    setFormError(null);
+
+    // Client-side checks so we point at the exact problem before the round-trip.
+    if (usingNew) {
+      const missing = firstMissingAddressField(newAddress);
+      if (missing) return fail(`Please add your ${missing} to continue.`);
     }
+    if (contactEmail.trim() && !isValidEmail(contactEmail)) {
+      return fail("Please enter a valid contact email address.");
+    }
+
     setBusy(true);
     try {
       const shipping: Shipping | undefined = usingNew
@@ -140,7 +183,18 @@ export function CheckoutForm() {
       setOrder(await checkoutApi.getOrder(created.number).catch(() => created));
       toast.success("Order placed — payment confirmed");
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Checkout failed.");
+      // Route the error to the actual issue.
+      const code = e instanceof ApiError ? e.code : "";
+      if (BAG_ERROR_CODES.has(code)) {
+        fail(
+          e instanceof ApiError && e.code !== "cart_invalid"
+            ? errorMessage(e)
+            : "Some items in your bag are no longer available or changed price. Please review your bag.",
+          true,
+        );
+      } else {
+        fail(errorMessage(e, "We couldn’t complete your checkout. Please try again."));
+      }
     } finally {
       setBusy(false);
     }
@@ -188,11 +242,25 @@ export function CheckoutForm() {
   const hasSaved = addresses.length > 0;
 
   return (
-    <div className="grid gap-8 lg:grid-cols-[1fr_22rem]">
-      <div className="rounded-2xl border border-ink/10 bg-white p-6">
-        <h2 className="font-display text-lg font-bold text-ink">
-          Shipping destination
-        </h2>
+    <div className="flex flex-col gap-6">
+      {formError && (
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-accent/30 bg-accent/[0.06] px-4 py-3 text-sm text-accent">
+          <span className="font-medium">{formError.message}</span>
+          {formError.reviewBag && (
+            <Link
+              href="/cart"
+              className="ml-auto shrink-0 rounded-lg bg-accent px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-accent-hover"
+            >
+              Review your bag
+            </Link>
+          )}
+        </div>
+      )}
+      <div className="grid gap-8 lg:grid-cols-[1fr_22rem]">
+        <div className="rounded-2xl border border-ink/10 bg-white p-6">
+          <h2 className="font-display text-lg font-bold text-ink">
+            Shipping destination
+          </h2>
         <p className="mb-5 mt-1 text-sm text-ink/55">
           {hasSaved
             ? "Choose a saved address or add a new one."
@@ -371,6 +439,7 @@ export function CheckoutForm() {
           <OrderChatButton context="checkout" />
         </div>
       </aside>
+      </div>
     </div>
   );
 }

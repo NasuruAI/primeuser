@@ -1,5 +1,6 @@
 "use client";
 
+import { parseApiError } from "@/lib/api-error";
 import type { Address, AddressInput } from "@/types/address";
 
 /** Saved-address book API via the authed proxy (requires a signed-in user). */
@@ -8,10 +9,7 @@ async function call<T>(path: string, init: RequestInit = {}): Promise<T> {
     headers: { "Content-Type": "application/json" },
     ...init,
   });
-  if (!res.ok) {
-    const body = await res.json().catch(() => null);
-    throw new Error(body?.error?.message ?? `Request failed (${res.status})`);
-  }
+  if (!res.ok) throw await parseApiError(res);
   // DELETE / set-default may return 204 No Content.
   if (res.status === 204) return undefined as T;
   return (await res.json()) as T;

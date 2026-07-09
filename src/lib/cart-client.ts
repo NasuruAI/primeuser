@@ -1,5 +1,6 @@
 "use client";
 
+import { parseApiError } from "@/lib/api-error";
 import type { Cart } from "@/types/cart";
 
 /**
@@ -13,10 +14,7 @@ async function call(path: string, init: RequestInit = {}): Promise<Cart> {
     headers: { "Content-Type": "application/json" },
     ...init,
   });
-  if (!res.ok) {
-    const body = await res.json().catch(() => null);
-    throw new Error(body?.error?.message ?? `Request failed (${res.status})`);
-  }
+  if (!res.ok) throw await parseApiError(res);
   return (await res.json()) as Cart;
 }
 
