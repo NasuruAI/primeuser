@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 
 import "./globals.css";
+import { GoogleAnalytics } from "@/components/analytics/google-analytics";
 import { JsonLd } from "@/components/seo/json-ld";
 import { SiteChrome } from "@/components/store/site-chrome";
 import { ToastProvider } from "@/components/ui/toast";
@@ -69,6 +70,7 @@ export default async function RootLayout({
       style={brandStyle(brand.primary, brand.accent)}
     >
       <body className="min-h-screen font-sans">
+        <GoogleAnalytics />
         {/* Warm up the image CDN connection early for a faster LCP image. */}
         <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
