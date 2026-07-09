@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
+import { parseApiError } from "@/lib/api-error";
 import type { User } from "@/types/auth";
 
 async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
@@ -12,10 +13,7 @@ async function api<T>(path: string, init: RequestInit = {}): Promise<T> {
     headers: { "Content-Type": "application/json" },
     ...init,
   });
-  if (!res.ok) {
-    const body = await res.json().catch(() => null);
-    throw new Error(body?.error?.message ?? `Request failed (${res.status})`);
-  }
+  if (!res.ok) throw await parseApiError(res);
   return (await res.json()) as T;
 }
 

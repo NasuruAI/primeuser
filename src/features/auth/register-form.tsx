@@ -7,6 +7,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
+import { flattenFieldErrors, summarizeFieldErrors } from "@/lib/api-error";
 
 const schema = z.object({
   full_name: z.string().optional(),
@@ -33,7 +34,11 @@ export function RegisterForm() {
     });
     if (!res.ok) {
       const body = await res.json().catch(() => ({}));
-      toast.error(body.error ?? "Could not create your account.");
+      const fields = flattenFieldErrors(body.details);
+      const message = Object.keys(fields).length
+        ? summarizeFieldErrors(fields)
+        : (body.error ?? "Could not create your account.");
+      toast.error(message);
       return;
     }
     // Hard navigation so /account renders with the freshly set auth cookie.

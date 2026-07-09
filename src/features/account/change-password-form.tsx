@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
+import { errorMessage, parseApiError } from "@/lib/api-error";
 
 export function ChangePasswordForm() {
   const toast = useToast();
@@ -32,16 +33,13 @@ export function ChangePasswordForm() {
           new_password: next,
         }),
       });
-      if (!res.ok) {
-        const body = await res.json().catch(() => null);
-        throw new Error(body?.error?.message ?? "Could not change password.");
-      }
+      if (!res.ok) throw await parseApiError(res);
       toast.success("Password changed");
       setCurrent("");
       setNext("");
       setConfirm("");
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Could not change password.");
+      toast.error(errorMessage(e, "Could not change your password."));
     } finally {
       setSaving(false);
     }

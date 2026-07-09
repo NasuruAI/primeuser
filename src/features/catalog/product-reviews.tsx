@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Stars } from "@/components/ui/stars";
 import { useToast } from "@/components/ui/toast";
+import { errorMessage, parseApiError } from "@/lib/api-error";
 import type { Review } from "@/types/catalog";
 
 function fmtDate(iso: string): string {
@@ -78,17 +79,14 @@ export function ProductReviews({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ product: productId, rating, title, body }),
       });
-      if (!res.ok) {
-        const b = await res.json().catch(() => null);
-        throw new Error(b?.error?.message ?? "Could not submit your review.");
-      }
+      if (!res.ok) throw await parseApiError(res);
       toast.success("Thanks for your review!");
       setRating(0);
       setTitle("");
       setBody("");
       await refresh();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Submission failed.");
+      toast.error(errorMessage(err, "Couldn’t submit your review."));
     } finally {
       setBusy(false);
     }

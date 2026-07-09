@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+import { parseApiError } from "@/lib/api-error";
+
 type State = "verifying" | "ok" | "error";
 
 export function VerifyEmail() {
@@ -27,11 +29,10 @@ export function VerifyEmail() {
         if (res.ok) {
           setState("ok");
         } else {
-          const body = await res.json().catch(() => null);
+          const err = await parseApiError(res);
           setState("error");
           setMessage(
-            body?.error?.message ??
-              "This verification link is invalid or has expired.",
+            err.message || "This verification link is invalid or has expired.",
           );
         }
       })

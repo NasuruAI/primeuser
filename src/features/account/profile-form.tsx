@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/toast";
+import { errorMessage, parseApiError } from "@/lib/api-error";
 import type { User } from "@/types/auth";
 
 export function ProfileForm({ user }: { user: User }) {
@@ -33,14 +34,11 @@ export function ProfileForm({ user }: { user: User }) {
           marketing_opt_in: marketing,
         }),
       });
-      if (!res.ok) {
-        const body = await res.json().catch(() => null);
-        throw new Error(body?.error?.message ?? "Could not save your profile.");
-      }
+      if (!res.ok) throw await parseApiError(res);
       toast.success("Profile updated");
       router.refresh();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Could not save.");
+      toast.error(errorMessage(e, "Couldn’t save your profile."));
     } finally {
       setSaving(false);
     }
